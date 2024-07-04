@@ -1,25 +1,47 @@
-package com.example.veganlens
+package com.example.veganlens.startPages
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import android.widget.Toast
-import com.example.veganlens.databinding.ActivityNicknameBinding
-import com.example.veganlens.network.*
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.example.veganlens.R
+import com.example.veganlens.databinding.FragmentNicknameBinding
+import com.example.veganlens.network.AddNicknameRequest
+import com.example.veganlens.network.AddNicknameResponse
+import com.example.veganlens.network.CheckNicknameRequest
+import com.example.veganlens.network.CheckNicknameResponse
+import com.example.veganlens.network.NetworkService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class NicknameActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityNicknameBinding
+class NicknameFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityNicknameBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    private lateinit var binding: FragmentNicknameBinding
+    private lateinit var sharedPreferences: SharedPreferences
 
-        val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentNicknameBinding.inflate(inflater, container, false)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
+        binding.buttonNext.setOnClickListener {
+            val nickname = binding.editTextNickname.text.toString()
+            if (nickname.isNotEmpty()) {
+                sharedPreferences.edit().putString("nickname", nickname).apply()
+                findNavController().navigate(R.id.action_NicknameFragment_to_VeganReasonFragment)
+            } else {
+                binding.editTextNickname.error = "닉네임을 입력해 주세요."
+            }
+        }
+        
+        /* DB API 호출 코드 예시
         binding.btnSave.setOnClickListener {
             val nickname = binding.nicknameEditText.text.toString()
 
@@ -49,7 +71,9 @@ class NicknameActivity : AppCompatActivity() {
                         t.printStackTrace()
                     }
                 })
-        }
+        }*/
+
+        return binding.root
     }
 
     private fun saveNicknameOnServer(nickname: String) {
@@ -59,18 +83,17 @@ class NicknameActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val addResponse = response.body()
                         if (addResponse != null && addResponse.success) {
-                            Toast.makeText(this@NicknameActivity, addResponse.message, Toast.LENGTH_SHORT).show()
                             // 저장 성공 처리
                         } else {
-                            Toast.makeText(this@NicknameActivity, "닉네임 저장 실패", Toast.LENGTH_SHORT).show()
+                            // 닉네임 저장 실패 처리
                         }
                     } else {
-                        Toast.makeText(this@NicknameActivity, "서버 오류 발생", Toast.LENGTH_SHORT).show()
+                        // 서버 오류 발생
                     }
                 }
 
                 override fun onFailure(call: Call<AddNicknameResponse>, t: Throwable) {
-                    Toast.makeText(this@NicknameActivity, "네트워크 오류 발생", Toast.LENGTH_SHORT).show()
+                    // 네트워크 오류 발생
                     t.printStackTrace()
                 }
             })
