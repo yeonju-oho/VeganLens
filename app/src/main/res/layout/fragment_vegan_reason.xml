@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eaf2d3"
+    tools:context=".startPages.VeganReasonFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#eaf2d3">
+
+        <LinearLayout
+            android:id="@+id/textContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="안녕! 도토리!\n비건을 왜 시작하게 되었어?"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:padding="8dp"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="중복 선택도 가능해"
+                android:textSize="14sp"
+                android:layout_gravity="center_horizontal"
+                android:padding="8dp"
+                android:textColor="#2C573C" />
+        </LinearLayout>
+
+        <!-- 스크롤 가능한 내용 -->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/textContainer"
+            app:layout_constraintBottom_toTopOf="@id/buttonNext"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewHealth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:minHeight="48dp"
+                    app:cardElevation="4dp"
+                    android:background="@drawable/card_background"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/cardTextHealth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="건강에 대한 관심"
+                        android:textSize="16sp"
+                        android:textColor="@color/defaultGreen"
+                        android:padding="16dp"/>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewMeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:minHeight="48dp"
+                    app:cardElevation="4dp"
+                    android:background="@drawable/card_background"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/cardTextMeat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="고기의 화학 성분과 호르몬 문제"
+                        android:textSize="16sp"
+                        android:textColor="@color/defaultGreen"
+                        android:padding="16dp"/>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewAnimal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:minHeight="48dp"
+                    app:cardElevation="4dp"
+                    android:background="@drawable/card_background"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/cardTextAnimal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="동물에 대한 사랑과 권리 보호"
+                        android:textSize="16sp"
+                        android:textColor="@color/defaultGreen"
+                        android:padding="16dp"/>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewReligion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:minHeight="48dp"
+                    app:cardElevation="4dp"
+                    android:background="@drawable/card_background"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/cardTextReligion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="종교적인 이유"
+                        android:textSize="16sp"
+                        android:textColor="@color/defaultGreen"
+                        android:padding="16dp"/>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewEnvironment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:minHeight="48dp"
+                    app:cardElevation="4dp"
+                    android:background="@drawable/card_background"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/cardTextEnvironment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="환경에 대한 염려"
+                        android:textSize="16sp"
+                        android:textColor="@color/defaultGreen"
+                        android:padding="16dp"/>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewWeight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:minHeight="48dp"
+                    app:cardElevation="4dp"
+                    android:background="@drawable/card_background"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/cardTextWeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="체중 감량"
+                        android:textSize="16sp"
+                        android:textColor="@color/defaultGreen"
+                        android:padding="16dp"/>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewFamine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:minHeight="48dp"
+                    app:cardElevation="4dp"
+                    android:background="@drawable/card_background"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/cardTextFamine"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="세계의 기아와 기근 문제"
+                        android:textSize="16sp"
+                        android:textColor="@color/defaultGreen"
+                        android:padding="16dp"/>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <Button
+            android:id="@+id/buttonNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이거야!"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:padding="12dp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#2C573C"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

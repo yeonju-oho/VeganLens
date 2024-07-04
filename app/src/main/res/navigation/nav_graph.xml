@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/NicknameFragment">
+
+    <!-- 1단계: 닉네임 입력 프래그먼트 -->
+    <fragment
+        android:id="@+id/NicknameFragment"
+        android:name="com.example.veganlens.startPages.NicknameFragment"
+        tools:layout="@layout/fragment_nickname">
+        <action
+            android:id="@+id/action_NicknameFragment_to_VeganReasonFragment"
+            app:destination="@id/VeganReasonFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <!-- 2단계: 비건 이유 선택 프래그먼트 -->
+    <fragment
+        android:id="@+id/VeganReasonFragment"
+        android:name="com.example.veganlens.startPages.VeganReasonFragment"
+        tools:layout="@layout/fragment_vegan_reason">
+        <action
+            android:id="@+id/action_VeganReasonFragment_to_VeganLevelFragment"
+            app:destination="@id/VeganLevelFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <!-- 3단계: 비건 단계 선택 프래그먼트 -->
+    <fragment
+        android:id="@+id/VeganLevelFragment"
+        android:name="com.example.veganlens.startPages.VeganLevelFragment"
+        tools:layout="@layout/fragment_vegan_level">
+        <action
+            android:id="@+id/action_VeganLevelFragment_to_ResultFragment"
+            app:destination="@id/ResultFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <!-- 4단계: 결과 확인 프래그먼트 -->
+    <fragment
+        android:id="@+id/ResultFragment"
+        android:name="com.example.veganlens.startPages.ResultFragment"
+        tools:layout="@layout/fragment_result"/>
+</navigation>
