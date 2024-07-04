@@ -228,6 +228,7 @@
             android:text="이거야!"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:padding="12dp"
             android:textColor="#FFFFFF"
             android:backgroundTint="#2C573C"

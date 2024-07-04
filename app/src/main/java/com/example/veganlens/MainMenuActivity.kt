@@ -1,16 +1,20 @@
 package com.example.veganlens
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.ImageFormat
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageFormat
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -21,6 +25,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
+import java.io.ByteArrayOutputStream
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -28,6 +33,9 @@ class MainMenuActivity : AppCompatActivity() {
 
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var previewView: PreviewView
+    private var imageCapture: ImageCapture? = null
+    private var processingImage = false // 이미지 처리 중 여부를 나타내는 변수
+    private lateinit var iconCamera: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +45,7 @@ class MainMenuActivity : AppCompatActivity() {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
         previewView = findViewById(R.id.camera_frame)
+        iconCamera = findViewById(R.id.icon_camera)
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
             != PackageManager.PERMISSION_GRANTED
@@ -50,8 +59,10 @@ class MainMenuActivity : AppCompatActivity() {
             startCamera()
         }
 
-        findViewById<ImageView>(R.id.icon_camera).setOnClickListener {
-            startCamera()
+        iconCamera.setOnClickListener {
+            if (!processingImage) { // 이미지 처리 중이 아닌 경우에만 실행
+                takePhoto()
+            }
         }
     }
 
@@ -64,15 +75,7 @@ class MainMenuActivity : AppCompatActivity() {
                 it.setSurfaceProvider(previewView.surfaceProvider)
             }
 
-            val imageAnalyzer = ImageAnalysis.Builder()
-                .build()
-                .also {
-                    it.setAnalyzer(cameraExecutor, { imageProxy ->
-                        val bitmap = imageProxy.toBitmap()
-                        processImage(bitmap)
-                        imageProxy.close()
-                    })
-                }
+            imageCapture = ImageCapture.Builder().build()
 
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -82,7 +85,7 @@ class MainMenuActivity : AppCompatActivity() {
                     this as LifecycleOwner,
                     cameraSelector,
                     preview,
-                    imageAnalyzer
+                    imageCapture
                 )
             } catch (exc: Exception) {
                 Log.e("MainMenuActivity", "Use case binding failed", exc)
@@ -90,10 +93,33 @@ class MainMenuActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
+    private fun takePhoto() {
+        val imageCapture = imageCapture ?: return
+
+        processingImage = true // 이미지 처리 중으로 설정
+        iconCamera.isEnabled = false // 버튼 비활성화
+
+        imageCapture.takePicture(ContextCompat.getMainExecutor(this), object : ImageCapture.OnImageCapturedCallback() {
+            override fun onCaptureSuccess(image: ImageProxy) {
+                val bitmap = image.toBitmap()
+                image.close()
+
+                // 이미지 처리 메서드 호출
+                processImage(bitmap)
+            }
+
+            override fun onError(exception: ImageCaptureException) {
+                Log.e("MainMenuActivity", "Photo capture failed: ${exception.message}", exception)
+                processingImage = false // 이미지 처리 실패 시 초기화
+                iconCamera.isEnabled = true // 버튼 활성화
+            }
+        })
+    }
+
     private fun ImageProxy.toBitmap(): Bitmap {
         val nv21Buffer = yuv420ThreePlanesToNV21(planes, width, height)
         val yuvImage = android.graphics.YuvImage(nv21Buffer, ImageFormat.NV21, width, height, null)
-        val out = java.io.ByteArrayOutputStream()
+        val out = ByteArrayOutputStream()
         yuvImage.compressToJpeg(android.graphics.Rect(0, 0, width, height), 100, out)
         val imageBytes = out.toByteArray()
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
@@ -130,6 +156,38 @@ class MainMenuActivity : AppCompatActivity() {
         return out
     }
 
+    private fun unpackPlane(
+        plane: ImageProxy.PlaneProxy, width: Int, height: Int,
+        out: ByteArray, offset: Int, pixelsStride: Int
+    ) {
+        val buffer = plane.buffer
+        buffer.rewind() // 버퍼의 위치를 초기화합니다.
+
+        val numRow = (buffer.remaining() + plane.rowStride - 1) / plane.rowStride
+        if (numRow == 0) return
+
+        val scaleFactor = width / plane.rowStride.toFloat()
+        if (scaleFactor != scaleFactor.toInt().toFloat()) {
+            // scaleFactor가 정수가 아닐 때
+            for (i in 0 until numRow) {
+                val rowStart = i * plane.rowStride
+                val length = plane.rowStride.coerceAtMost(buffer.remaining())
+                buffer.limit(rowStart + length)
+                buffer.position(rowStart)
+                buffer.get(out, offset + i * pixelsStride * width, length)
+            }
+        } else {
+            // scaleFactor가 정수일 때
+            val rowLength = (width / scaleFactor).toInt()
+            for (i in 0 until numRow) {
+                val rowStart = i * plane.rowStride
+                buffer.limit(rowStart + plane.rowStride)
+                buffer.position(rowStart)
+                buffer.get(out, offset + i * rowLength * pixelsStride, rowLength)
+            }
+        }
+    }
+
     private fun areUVPlanesNV21(
         planes: Array<ImageProxy.PlaneProxy>,
         width: Int,
@@ -151,34 +209,6 @@ class MainMenuActivity : AppCompatActivity() {
         return uBuffer.remaining() == imageSize / 4 && vBuffer.remaining() == imageSize / 4
     }
 
-    private fun unpackPlane(
-        plane: ImageProxy.PlaneProxy, width: Int, height: Int,
-        out: ByteArray, offset: Int, pixelsStride: Int
-    ) {
-        val buffer = plane.buffer
-        buffer.rewind()
-
-        val numRow = (buffer.remaining() + plane.rowStride - 1) / plane.rowStride
-        if (numRow == 0) return
-
-        val scaleFactor = width / plane.rowStride.toFloat()
-        if (scaleFactor != scaleFactor.toInt().toFloat()) {
-            for (i in 0 until numRow) {
-                buffer.limit((i + 1) * plane.rowStride)
-                buffer.position(i * plane.rowStride)
-                val length = plane.rowStride.coerceAtMost(buffer.remaining())
-                buffer.get(out, offset + i * pixelsStride * width, length)
-            }
-        } else {
-            val rowLength = (width / scaleFactor).toInt()
-            for (i in 0 until numRow) {
-                buffer.limit((i + 1) * plane.rowStride)
-                buffer.position(i * plane.rowStride)
-                buffer.get(out, offset + i * rowLength * pixelsStride, rowLength)
-            }
-        }
-    }
-
     private fun processImage(bitmap: Bitmap) {
         val image = InputImage.fromBitmap(bitmap, 0)
         val recognizer = TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
@@ -187,15 +217,27 @@ class MainMenuActivity : AppCompatActivity() {
             .addOnSuccessListener { visionText ->
                 val resultText = visionText.text
                 Log.d("OCR Result", resultText)
-                if (resultText.contains("계란") || resultText.contains("우유")) {
-                    Log.d("Keyword Found", "특정 키워드가 발견되었습니다!")
-                } else {
-                    Log.d("Keyword Not Found", "특정 키워드가 없습니다.")
-                }
+                showTextPopup(resultText)
+                processingImage = false
+                iconCamera.isEnabled = true // 버튼 활성화
             }
             .addOnFailureListener { e ->
                 Log.e("OCR Error", e.message.toString())
+                showTextPopup("OCR Error. " + e.message.toString())
+                processingImage = false
+                iconCamera.isEnabled = true // 버튼 활성화
             }
+    }
+
+    private fun showTextPopup(text: String) {
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setTitle("인식된 텍스트")
+        alertDialogBuilder.setMessage(text)
+        alertDialogBuilder.setPositiveButton("확인") { dialog, which ->
+            // 사용자가 확인을 눌렀을 때 추가적인 동작을 수행할 수 있음
+        }
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
     }
 
     override fun onDestroy() {

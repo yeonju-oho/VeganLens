@@ -10,11 +10,13 @@
     <androidx.camera.view.PreviewView
         android:id="@+id/camera_frame"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_menu"
         android:scaleType="centerCrop" />
 
     <!-- 고정된 하단 메뉴 바 -->
     <RelativeLayout
+        android:id="@+id/bottom_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
