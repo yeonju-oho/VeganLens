@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:backgroundTint="#4CAF50"
+        android:backgroundTint="#2C573C"
         android:text="이렇게 불러줘"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
