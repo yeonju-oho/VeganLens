@@ -215,9 +215,20 @@ class MainMenuActivity : AppCompatActivity() {
 
         recognizer.process(image)
             .addOnSuccessListener { visionText ->
-                val resultText = visionText.text
+                var resultText = visionText.text
+                // 줄바꿈과 공백을 제거하여 한 줄로 만듦
+                resultText = resultText.replace(Regex("\\s+"), "")
                 Log.d("OCR Result", resultText)
-                showTextPopup(resultText)
+
+                // 특정 텍스트가 포함되어 있는지 판단, 원재료 판단 코드 추가함
+                val keywords = listOf("유당", "여제", "계란", "우유", "분유") // 원하는 텍스트 추가
+                val foundKeywords = keywords.filter { resultText.contains(it, ignoreCase = true) }
+
+                if (foundKeywords.isNotEmpty()) {
+                    showTextPopup("포함된 원재료: ${foundKeywords.joinToString(", ")}")
+                } else {
+                    showTextPopup("육류, 우유, 계란이 포함되어 있지 않습니다")
+                }
                 processingImage = false
                 iconCamera.isEnabled = true // 버튼 활성화
             }
@@ -228,6 +239,7 @@ class MainMenuActivity : AppCompatActivity() {
                 iconCamera.isEnabled = true // 버튼 활성화
             }
     }
+
 
     private fun showTextPopup(text: String) {
         val alertDialogBuilder = AlertDialog.Builder(this)
