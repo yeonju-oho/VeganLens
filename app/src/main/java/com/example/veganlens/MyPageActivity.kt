@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 class MyPageActivity : AppCompatActivity() {
@@ -37,8 +39,29 @@ class MyPageActivity : AppCompatActivity() {
 
         // 자기소개 클릭 이벤트
         tvIntro.setOnClickListener {
-            // 자기소개 수정 로직 구현
+            showEditIntroDialog()
         }
+    }
+
+    // 자기소개 수정 다이얼로그 표시
+    private fun showEditIntroDialog() {
+        val editText = EditText(this).apply {
+            hint = "자기소개를 입력하세요"
+            setText(tvIntro.text)
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("자기소개 수정")
+            .setView(editText)
+            .setPositiveButton("저장") { dialog, _ ->
+                val newIntro = editText.text.toString()
+                tvIntro.text = newIntro
+                dialog.dismiss()
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
