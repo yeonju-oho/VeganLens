@@ -2,7 +2,6 @@ package com.example.veganlens
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.ImageView
