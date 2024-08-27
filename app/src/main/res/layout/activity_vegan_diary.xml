@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#F5F5F5">
+
+    <!-- 이미지 및 제목 -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/vlog_image"
+        android:contentDescription="Vlog Image" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="두부로 표현할 수 있는 최고의 맛! 해방촌 바이두부"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#333"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 사용자 정보 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="#FFFFFF"
+        android:layout_marginBottom="16dp">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_profile"
+            android:contentDescription="User Profile Image"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="나 (공개)"
+            android:textSize="16sp"
+            android:textColor="#333"
+            android:gravity="center_vertical" />
+    </LinearLayout>
+
+    <!-- 본문 텍스트 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="남영역에서 용산02번 마을버스를 타고 올라오니 바이두부 바로 근처에서 내릴 수 있더라고요.
+토요일 1시쯤 도착했을 땐 딱 바쁜 타임이 끝나고 한 텀 쉴 시간도 못 했어요. 러쉬 경리단길이라 한 텀 쉴 시간도 못 했어요.
+러쉬 경리단길이라 한 텀 쉴 시간도 못 했어요..."
+        android:textSize="14sp"
+        android:textColor="#333" />
+
+</LinearLayout>
