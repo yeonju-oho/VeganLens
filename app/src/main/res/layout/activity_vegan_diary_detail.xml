@@ -1,0 +1,111 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/white"
+    tools:context=".VeganDiaryDetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvDiaryDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2024-06-28"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- 사진 보여주기 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <!-- 예시로 최대 5개의 이미지뷰 추가 -->
+            <ImageView
+                android:id="@+id/ivPhoto1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#eaf2d3"
+                android:contentDescription="사진1"
+                android:layout_marginEnd="8dp"/>
+
+            <ImageView
+                android:id="@+id/ivPhoto2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#eaf2d3"
+                android:contentDescription="사진2"
+                android:layout_marginEnd="8dp"
+                android:visibility="gone"/> <!-- 필요 시 표시 -->
+
+            <ImageView
+                android:id="@+id/ivPhoto3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#eaf2d3"
+                android:contentDescription="사진3"
+                android:layout_marginEnd="8dp"
+                android:visibility="gone"/> <!-- 필요 시 표시 -->
+
+            <ImageView
+                android:id="@+id/ivPhoto4"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#eaf2d3"
+                android:contentDescription="사진4"
+                android:layout_marginEnd="8dp"
+                android:visibility="gone"/> <!-- 필요 시 표시 -->
+
+            <ImageView
+                android:id="@+id/ivPhoto5"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#eaf2d3"
+                android:contentDescription="사진5"
+                android:layout_marginEnd="8dp"
+                android:visibility="gone"/> <!-- 필요 시 표시 -->
+        </LinearLayout>
+
+        <!-- 내용 표시 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="내용"
+            android:layout_marginBottom="8dp"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvDiaryContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#eaf2d3"
+            android:padding="8dp"
+            android:text="여기에 사용자가 작성한 일기 내용이 표시됩니다."
+            android:gravity="top"/>
+
+        <!-- 태그 표시 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="태그"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:id="@+id/tagContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</ScrollView>
