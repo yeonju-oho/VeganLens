@@ -11,73 +11,12 @@
         android:id="@+id/camera_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_menu"
         android:scaleType="centerCrop" />
 
     <!-- 고정된 하단 메뉴 바 -->
-    <RelativeLayout
-        android:id="@+id/bottom_menu"
+    <include
+        layout="@layout/bottom_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#eaf2d3"
-        android:padding="8dp">
-
-        <!-- 왼쪽 아이콘 1 -->
-        <ImageView
-            android:id="@+id/icon_map"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="19dp"
-            android:layout_marginEnd="30dp"
-            android:src="@drawable/ic_map" />
-
-        <!-- 왼쪽 아이콘 2 -->
-        <ImageView
-            android:id="@+id/icon_recipe"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_toEndOf="@id/icon_map"
-            android:layout_marginEnd="24dp"
-            android:src="@drawable/ic_recipe"
-            android:layout_centerVertical="true" />
-
-        <!-- 오른쪽 아이콘 1 -->
-        <ImageView
-            android:id="@+id/icon_user"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="25dp"
-            android:src="@drawable/ic_user" />
-
-        <!-- 오른쪽 아이콘 2 -->
-        <ImageView
-            android:id="@+id/icon_calendar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_toStartOf="@id/icon_user"
-            android:layout_marginStart="24dp"
-            android:src="@drawable/ic_calendar"
-            android:layout_centerVertical="true" />
-
-        <!-- 중앙 동그라미 -->
-        <FrameLayout
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/circle_background"
-            android:elevation="8dp"
-            android:layout_gravity="center">
-
-            <ImageView
-                android:id="@+id/icon_camera"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/ic_camera"
-                android:layout_gravity="center" />
-        </FrameLayout>
-    </RelativeLayout>
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>
