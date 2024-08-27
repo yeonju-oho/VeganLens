@@ -1,0 +1,117 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/white"
+    tools:context=".AddVeganDiaryActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오늘의 비건일기"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#2C573C"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- 사진 등록 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사진등록(최대 5장)"
+            android:layout_marginBottom="8dp"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <ImageView
+                android:id="@+id/ivAddPhoto"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="#eaf2d3"
+                android:contentDescription="사진 등록"
+                android:src="@drawable/ic_add"/>
+        </LinearLayout>
+
+        <!-- 내용 입력 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="내용"
+            android:layout_marginBottom="8dp"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/etDiaryContent"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:hint="내용을 입력해 주세요"
+            android:background="#eaf2d3"
+            android:padding="8dp"
+            android:gravity="top"/>
+
+        <!-- 태그 추가 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="태그달기 (최대 5개)"
+            android:layout_marginTop="16dp"/>
+
+        <!-- 태그 입력 필드 -->
+        <EditText
+            android:id="@+id/etTagInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="태그를 입력하세요"
+            android:layout_marginTop="8dp"/>
+
+        <!-- 태그 추가 버튼 -->
+        <Button
+            android:id="@+id/btnAddTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="태그 추가"
+            android:background="#eaf2d3"
+            android:textColor="@color/black"
+            android:layout_marginTop="8dp"/>
+
+        <!-- 태그 컨테이너 -->
+        <LinearLayout
+            android:id="@+id/tagContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:gravity="start"
+            android:layout_wrapBefore="true"/>
+
+        <!-- 작성 완료 버튼 -->
+        <Button
+            android:id="@+id/btnComplete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="작성완료"
+            android:background="#eaf2d3"
+            android:textColor="@color/black"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"/>
+    </LinearLayout>
+</ScrollView>
