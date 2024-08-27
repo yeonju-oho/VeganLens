@@ -68,41 +68,6 @@
             android:padding="8dp"
             android:gravity="top"/>
 
-        <!-- 태그 추가 -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="태그달기 (최대 5개)"
-            android:layout_marginTop="16dp"/>
-
-        <!-- 태그 입력 필드 -->
-        <EditText
-            android:id="@+id/etTagInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="태그를 입력하세요"
-            android:layout_marginTop="8dp"/>
-
-        <!-- 태그 추가 버튼 -->
-        <Button
-            android:id="@+id/btnAddTag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="태그 추가"
-            android:background="#eaf2d3"
-            android:textColor="@color/black"
-            android:layout_marginTop="8dp"/>
-
-        <!-- 태그 컨테이너 -->
-        <LinearLayout
-            android:id="@+id/tagContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:gravity="start"
-            android:layout_wrapBefore="true"/>
-
         <!-- 작성 완료 버튼 -->
         <Button
             android:id="@+id/btnComplete"

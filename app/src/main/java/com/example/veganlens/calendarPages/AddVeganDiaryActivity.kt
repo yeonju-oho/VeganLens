@@ -8,8 +8,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -20,13 +18,9 @@ class AddVeganDiaryActivity : AppCompatActivity() {
 
     private lateinit var ivAddPhoto: ImageView
     private lateinit var etDiaryContent: EditText
-    private lateinit var btnAddTag: Button
     private lateinit var btnComplete: Button
-    private lateinit var etTagInput: EditText
-    private lateinit var tagContainer: LinearLayout
 
     private val selectedImages = mutableListOf<Uri>()
-    private val tags = mutableListOf<String>()
 
     // 갤러리에서 사진 선택을 위한 launcher
     private val pickImagesLauncher = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris: List<Uri>? ->
@@ -47,19 +41,11 @@ class AddVeganDiaryActivity : AppCompatActivity() {
 
         ivAddPhoto = findViewById(R.id.ivAddPhoto)
         etDiaryContent = findViewById(R.id.etDiaryContent)
-        btnAddTag = findViewById(R.id.btnAddTag)
         btnComplete = findViewById(R.id.btnComplete)
-        etTagInput = findViewById(R.id.etTagInput)
-        tagContainer = findViewById(R.id.tagContainer)
 
         // 사진 등록 클릭 이벤트
         ivAddPhoto.setOnClickListener {
             checkGalleryPermissionAndPickImages()
-        }
-
-        // 태그 추가 클릭 이벤트
-        btnAddTag.setOnClickListener {
-            addTag()
         }
 
         // 작성 완료 버튼 클릭 이벤트
@@ -86,47 +72,6 @@ class AddVeganDiaryActivity : AppCompatActivity() {
             ivAddPhoto.setImageURI(selectedImages[0])
             // 추가적으로 다른 ImageView들을 활용해서 최대 5장까지 보여줄 수 있음.
         }
-    }
-
-    private fun addTag() {
-        val tagText = etTagInput.text.toString().trim()
-        if (tagText.isNotEmpty() && tags.size < 5) {
-            tags.add(tagText)
-            etTagInput.text.clear()
-            displayTags()
-        } else {
-            Toast.makeText(this, "태그는 최대 5개까지 추가할 수 있습니다.", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun displayTags() {
-        tagContainer.removeAllViews()
-        for (tag in tags) {
-            val tagView = createTagView(tag)
-            tagContainer.addView(tagView)
-        }
-    }
-
-    private fun createTagView(tag: String): TextView {
-        val tagView = TextView(this)
-        tagView.text = "#$tag"
-        tagView.setPadding(16, 8, 16, 8)
-        tagView.setBackgroundResource(R.drawable.tag_background) // 태그 배경 drawable 설정함.
-        tagView.setTextColor(ContextCompat.getColor(this, R.color.white))
-
-        val layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        layoutParams.setMargins(8, 8, 8, 8)
-        tagView.layoutParams = layoutParams
-
-        tagView.setOnClickListener {
-            tags.remove(tag)
-            displayTags()
-        }
-
-        return tagView
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
