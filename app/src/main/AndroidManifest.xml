@@ -27,7 +27,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true"
+            android:exported="true"/>
         <activity android:name=".cameraPages.CameraFragment"
             android:exported="true" />
         <activity android:name=".startPages.RegistrationActivity"
