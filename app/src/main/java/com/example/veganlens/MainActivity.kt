@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         val iconCamera: ImageView = findViewById(R.id.icon_camera)
         val iconCalendar: ImageView = findViewById(R.id.icon_calendar)
         val iconUser: ImageView = findViewById(R.id.icon_user)
+        val iconRecipe: ImageView = findViewById(R.id.icon_recipe)
 
         iconCamera.setOnClickListener {
             replaceFragment(CameraFragment())
@@ -34,6 +35,10 @@ class MainActivity : AppCompatActivity() {
 
         iconUser.setOnClickListener {
             replaceFragment(MyPageFragment())
+        }
+
+        iconRecipe.setOnClickListener {
+            replaceFragment(VeganDiaryFragment())
         }
     }
 
