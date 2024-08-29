@@ -36,7 +36,6 @@ class CameraFragment : Fragment() {
     private lateinit var previewView: PreviewView
     private var imageCapture: ImageCapture? = null
     private var processingImage = false // 이미지 처리 중 여부를 나타내는 변수
-    private lateinit var iconCamera: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +49,6 @@ class CameraFragment : Fragment() {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
         previewView = view.findViewById(R.id.camera_frame)
-        iconCamera = view.findViewById(R.id.icon_camera)
 
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
             != PackageManager.PERMISSION_GRANTED
@@ -63,11 +61,11 @@ class CameraFragment : Fragment() {
             startCamera()
         }
 
-        iconCamera.setOnClickListener {
-            if (!processingImage) { // 이미지 처리 중이 아닌 경우에만 실행
-                takePhoto()
-            }
-        }
+//        iconCamera.setOnClickListener {
+//            if (!processingImage) { // 이미지 처리 중이 아닌 경우에만 실행
+//                takePhoto()
+//            }
+//        }
     }
 
     private fun startCamera() {
@@ -101,7 +99,7 @@ class CameraFragment : Fragment() {
         val imageCapture = imageCapture ?: return
 
         processingImage = true // 이미지 처리 중으로 설정
-        iconCamera.isEnabled = false // 버튼 비활성화
+        // 버튼 비활성화
 
         imageCapture.takePicture(ContextCompat.getMainExecutor(requireContext()), object : ImageCapture.OnImageCapturedCallback() {
             override fun onCaptureSuccess(image: ImageProxy) {
@@ -115,7 +113,7 @@ class CameraFragment : Fragment() {
             override fun onError(exception: ImageCaptureException) {
                 Log.e("CameraFragment", "Photo capture failed: ${exception.message}", exception)
                 processingImage = false // 이미지 처리 실패 시 초기화
-                iconCamera.isEnabled = true // 버튼 활성화
+                // 버튼 활성화
             }
         })
     }
@@ -234,13 +232,13 @@ class CameraFragment : Fragment() {
                     showTextPopup("육류, 우유, 계란이 포함되어 있지 않습니다")
                 }
                 processingImage = false
-                iconCamera.isEnabled = true // 버튼 활성화
+                // 버튼 활성화
             }
             .addOnFailureListener { e ->
                 Log.e("OCR Error", e.message.toString())
                 showTextPopup("OCR Error. " + e.message.toString())
                 processingImage = false
-                iconCamera.isEnabled = true // 버튼 활성화
+               // 버튼 활성화
             }
     }
 
