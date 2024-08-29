@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Todays Vlog"
+                android:text="Today Vlog"
                 android:textColor="#333"
                 android:textStyle="bold"
                 android:textSize="20sp" />
@@ -91,8 +91,7 @@
                     android:textStyle="bold"
                     android:layout_alignParentBottom="true"
                     android:layout_margin="16dp"
-                    android:padding="4dp"
-                    android:background="#000000"/>
+                    android:padding="4dp" />
             </RelativeLayout>
 
 
@@ -112,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:columnCount="2"
-                android:rowCount="2">
+                android:rowCount="3">
 
                 <!-- 첫 번째 이미지와 텍스트 -->
                 <LinearLayout
@@ -145,7 +144,7 @@
                     android:orientation="vertical"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
-                    android:layout_marginStart="8dp">
+                    android:layout_marginStart="8dp"> <!-- 이곳에 marginStart 추가 -->
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -170,7 +169,7 @@
                     android:orientation="vertical"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"> <!-- 이곳에 marginTop 추가 -->
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -196,7 +195,7 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"> <!-- 이곳에 marginStart와 marginTop 추가 -->
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -214,7 +213,59 @@
                         android:gravity="center"/>
                 </LinearLayout>
 
+                <!-- 다섯번째 이미지와 텍스트 -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:layout_marginTop="8dp"> <!-- 이곳에 marginTop 추가 -->
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/popular_post_5"
+                        android:contentDescription="Post 5" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="부모님도 너무 좋아하신 대구탕!"
+                        android:textSize="14sp"
+                        android:textColor="#333"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+                <!-- 여섯번째 이미지와 텍스트 -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"> <!-- 이곳에 marginStart와 marginTop 추가 -->
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/popular_post_6"
+                        android:contentDescription="Post 6" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="마켓컬리에서 주문해본 비건음식"
+                        android:textSize="14sp"
+                        android:textColor="#333"
+                        android:gravity="center"/>
+                </LinearLayout>
+
             </GridLayout>
+
 
 
         </LinearLayout>
