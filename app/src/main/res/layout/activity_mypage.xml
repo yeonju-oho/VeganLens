@@ -1,164 +1,187 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white"
-    android:padding="16dp"
     tools:context=".MyPageActivity">
 
-    <!-- 닉네임과 비건 레벨 -->
-    <LinearLayout
+    <!-- 내용이 들어갈 스크롤 영역 -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="start">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_menu"
+        android:padding="16dp"
+        android:background="@color/white">
 
-        <TextView
-            android:id="@+id/tvNickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="도토리"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginBottom="8dp"/>
-
-        <TextView
-            android:id="@+id/tvVeganLevel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="페스코베지테리언"
-            android:textSize="15sp"
-            android:background="@color/vegandarkgreen"
-            android:padding="8dp"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/vegandarkgreen"
-            android:clickable="true"
-            android:focusable="true"/>
-    </LinearLayout>
-
-    <!-- 프로필 이미지와 비건일기, 팔로워, 팔로잉 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="start"
-        android:layout_marginTop="16dp">
-
-        <!-- 프로필 이미지 -->
-        <ImageView
-            android:id="@+id/ivProfileImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/logo"
-            android:scaleType="centerCrop"
-            android:clipToOutline="true"
-            android:background="@drawable/circular_background"
-            android:layout_marginEnd="50dp"
-            android:clickable="true"
-            android:focusable="true"/>
-
-        <!-- 비건일기, 팔로워, 팔로잉 -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="30dp"
-            android:gravity="center_vertical">
+            android:orientation="vertical">
 
-            <!-- 비건일기 -->
+            <!-- 닉네임과 비건 레벨 -->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginEnd="20dp"
-                android:gravity="center">
+                android:layout_gravity="start">
 
                 <TextView
-                    android:id="@+id/tvVeganDaysLabel"
+                    android:id="@+id/tvNickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="비건일기"
-                    android:textColor="@color/black"
-                    android:layout_gravity="center"/>
-
-                <TextView
-                    android:id="@+id/tvVeganDays"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="120"
-                    android:textColor="@color/black"
+                    android:text="도토리"
+                    android:textSize="24sp"
                     android:textStyle="bold"
-                    android:layout_gravity="center"/>
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- 비건 레벨 TextView -->
+                <TextView
+                    android:id="@+id/tvVeganLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="페스코베지테리언"
+                    android:textSize="15sp"
+                    android:background="@color/vegandarkgreen"
+                    android:padding="10dp"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/vegandarkgreen"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:minHeight="48dp"/>
             </LinearLayout>
 
-            <!-- 팔로워 -->
+            <!-- 프로필 이미지와 비건일기, 팔로워, 팔로잉 -->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginEnd="20dp"
-                android:gravity="center">
+                android:orientation="horizontal"
+                android:layout_gravity="start"
+                android:layout_marginTop="16dp">
 
-                <TextView
-                    android:id="@+id/tvFollowersLabel"
+                <!-- 프로필 이미지 -->
+                <ImageView
+                    android:id="@+id/ivProfileImage"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/logo"
+                    android:scaleType="centerCrop"
+                    android:clipToOutline="true"
+                    android:background="@drawable/circular_background"
+                    android:layout_marginEnd="50dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="사용자 프로필 이미지"/>
+
+                <!-- 비건일기, 팔로워, 팔로잉 -->
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="팔로워"
-                    android:textColor="@color/black"
-                    android:layout_gravity="center"/>
+                    android:orientation="horizontal"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/tvFollowers"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="20"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:layout_gravity="center"/>
+                    <!-- 비건일기 -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="20dp"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/tvVeganDaysLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="비건일기"
+                            android:textColor="@color/black"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/tvVeganDays"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="120"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"/>
+                    </LinearLayout>
+
+                    <!-- 팔로워 -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="20dp"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/tvFollowersLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="팔로워"
+                            android:textColor="@color/black"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/tvFollowers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="20"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"/>
+                    </LinearLayout>
+
+                    <!-- 팔로잉 -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/tvFollowingLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="팔로잉"
+                            android:textColor="@color/black"
+                            android:layout_gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/tvFollowing"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="25"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:layout_gravity="center"/>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
-            <!-- 팔로잉 -->
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <!-- 자기소개 -->
+            <TextView
+                android:id="@+id/tvIntro"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/tvFollowingLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="팔로잉"
-                    android:textColor="@color/black"
-                    android:layout_gravity="center"/>
-
-                <TextView
-                    android:id="@+id/tvFollowing"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="25"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:layout_gravity="center"/>
-            </LinearLayout>
+                android:text="자기소개를 작성해줘"
+                android:background="#eaf2d3"
+                android:textColor="@color/black"
+                android:padding="14dp"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:focusable="true"/>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
-    <!-- 자기소개 -->
-    <TextView
-        android:id="@+id/tvIntro"
+    <!-- 하단 메뉴바 -->
+    <include
+        layout="@layout/bottom_menu"
+        android:id="@+id/bottom_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="자기소개를 작성해줘"
-        android:background="#eaf2d3"
-        android:textColor="@color/black"
-        android:padding="14dp"
-        android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:focusable="true"/>
-
-
-</LinearLayout>
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>
