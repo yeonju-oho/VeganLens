@@ -75,6 +75,7 @@
 
                 <!-- 이미지 추가 -->
                 <ImageView
+                    android:id="@+id/vlogImageView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -94,7 +95,6 @@
                     android:padding="4dp"
                     android:background="#0000000"/>
             </RelativeLayout>
-
 
             <!-- Popular Posts 섹션 -->
             <TextView
