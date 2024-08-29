@@ -3,13 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyPageActivity">
+    tools:context=".myPages.MyPageFragment">
 
     <!-- 내용이 들어갈 스크롤 영역 -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_menu"
         android:padding="16dp"
         android:background="@color/white">
 
@@ -177,11 +176,4 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- 하단 메뉴바 -->
-    <include
-        layout="@layout/bottom_menu"
-        android:id="@+id/bottom_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
 </RelativeLayout>
