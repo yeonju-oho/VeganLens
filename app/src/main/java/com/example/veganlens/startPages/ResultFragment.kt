@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
-import com.example.veganlens.MainMenuActivity
+import com.example.veganlens.cameraPages.CameraFragment
 import com.example.veganlens.databinding.FragmentResultBinding
 
 class ResultFragment : Fragment() {
@@ -32,7 +32,7 @@ class ResultFragment : Fragment() {
 
         binding.buttonFinish.setOnClickListener {
             // 메인 화면으로 이동하는 코드 추가
-            val intent = Intent(requireContext(), MainMenuActivity::class.java)
+            val intent = Intent(requireContext(), CameraFragment::class.java)
             startActivity(intent)
             requireActivity().finish() // 현재 액티비티를 종료하여 뒤로 가기 버튼 누를 때 다시 이 화면이 나오지 않도록 함
         }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#eaf2d3"
-    tools:context=".VeganCalendarActivity">
+    tools:context=".VeganCalendarFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

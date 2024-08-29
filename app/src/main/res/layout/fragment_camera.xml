@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -13,10 +12,14 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
-    <!-- 고정된 하단 메뉴 바 -->
-    <include
-        layout="@layout/bottom_menu"
-        android:layout_width="match_parent"
+    <!-- 카메라 촬영 버튼 -->
+    <ImageView
+        android:id="@+id/icon_camera"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
+        android:src="@drawable/ic_camera"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"/>
+
 </RelativeLayout>

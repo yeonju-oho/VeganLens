@@ -1,8 +1,9 @@
-package com.example.veganlens
+package com.example.veganlens.cameraPages
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
+import com.example.veganlens.R
 
 class FoodIngredientResultActivity : AppCompatActivity() {
 

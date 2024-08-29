@@ -1,27 +1,28 @@
-package com.example.veganlens
+package com.example.veganlens.cameraPages
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import com.example.veganlens.R
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
@@ -29,7 +30,7 @@ import java.io.ByteArrayOutputStream
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class MainMenuActivity : AppCompatActivity() {
+class CameraFragment : Fragment() {
 
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var previewView: PreviewView
@@ -37,21 +38,24 @@ class MainMenuActivity : AppCompatActivity() {
     private var processingImage = false // 이미지 처리 중 여부를 나타내는 변수
     private lateinit var iconCamera: ImageView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_menu)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_camera, container, false)
+    }
 
-        supportActionBar?.hide()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         cameraExecutor = Executors.newSingleThreadExecutor()
-        previewView = findViewById(R.id.camera_frame)
-        iconCamera = findViewById(R.id.icon_camera)
+        previewView = view.findViewById(R.id.camera_frame)
+        iconCamera = view.findViewById(R.id.icon_camera)
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
             != PackageManager.PERMISSION_GRANTED
         ) {
-            ActivityCompat.requestPermissions(
-                this,
+            requestPermissions(
                 arrayOf(Manifest.permission.CAMERA),
                 CAMERA_REQUEST_CODE
             )
@@ -67,7 +71,7 @@ class MainMenuActivity : AppCompatActivity() {
     }
 
     private fun startCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
@@ -88,9 +92,9 @@ class MainMenuActivity : AppCompatActivity() {
                     imageCapture
                 )
             } catch (exc: Exception) {
-                Log.e("MainMenuActivity", "Use case binding failed", exc)
+                Log.e("CameraFragment", "Use case binding failed", exc)
             }
-        }, ContextCompat.getMainExecutor(this))
+        }, ContextCompat.getMainExecutor(requireContext()))
     }
 
     private fun takePhoto() {
@@ -99,7 +103,7 @@ class MainMenuActivity : AppCompatActivity() {
         processingImage = true // 이미지 처리 중으로 설정
         iconCamera.isEnabled = false // 버튼 비활성화
 
-        imageCapture.takePicture(ContextCompat.getMainExecutor(this), object : ImageCapture.OnImageCapturedCallback() {
+        imageCapture.takePicture(ContextCompat.getMainExecutor(requireContext()), object : ImageCapture.OnImageCapturedCallback() {
             override fun onCaptureSuccess(image: ImageProxy) {
                 val bitmap = image.toBitmap()
                 image.close()
@@ -109,7 +113,7 @@ class MainMenuActivity : AppCompatActivity() {
             }
 
             override fun onError(exception: ImageCaptureException) {
-                Log.e("MainMenuActivity", "Photo capture failed: ${exception.message}", exception)
+                Log.e("CameraFragment", "Photo capture failed: ${exception.message}", exception)
                 processingImage = false // 이미지 처리 실패 시 초기화
                 iconCamera.isEnabled = true // 버튼 활성화
             }
@@ -240,9 +244,8 @@ class MainMenuActivity : AppCompatActivity() {
             }
     }
 
-
     private fun showTextPopup(text: String) {
-        val alertDialogBuilder = AlertDialog.Builder(this)
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
         alertDialogBuilder.setTitle("인식된 텍스트")
         alertDialogBuilder.setMessage(text)
         alertDialogBuilder.setPositiveButton("확인") { dialog, which ->
@@ -252,8 +255,8 @@ class MainMenuActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         cameraExecutor.shutdown()
     }
 
