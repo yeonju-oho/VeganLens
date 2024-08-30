@@ -25,8 +25,8 @@ class SplashActivity : AppCompatActivity() {
         // 2초 동안 스플래쉬 화면을 보여주고 LanguageSelectionActivity로 이동
         Handler(Looper.getMainLooper()).postDelayed({
 
-            //*** 테스트용. 회원가입 하고싶은 경우 주석 해제 ***
-            //this.clearSharedPreferences();
+            //TODO: *** 테스트용. 회원가입 하고싶은 경우 주석 해제 ***
+            this.clearSharedPreferences();
 
             // SharedPreferences에서 회원가입 여부 확인
             val isRegistered = sharedPreferences.getBoolean("isRegistered", false)

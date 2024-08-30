@@ -26,7 +26,12 @@ class MainActivity : AppCompatActivity() {
         val iconRecipe: ImageView = findViewById(R.id.icon_recipe)
 
         iconCamera.setOnClickListener {
-            replaceFragment(CameraFragment())
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+            if (currentFragment is CameraFragment) {
+                currentFragment.onCameraIconClicked()
+            } else {
+                replaceFragment(CameraFragment())
+            }
         }
 
         iconCalendar.setOnClickListener {

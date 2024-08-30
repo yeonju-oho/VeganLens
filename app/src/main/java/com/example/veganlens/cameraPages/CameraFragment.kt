@@ -23,9 +23,16 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import com.example.veganlens.R
+import com.example.veganlens.network.IngredientsResponse
+import com.example.veganlens.network.NetworkService
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
+import kotlinx.coroutines.launch
+import retrofit2.await
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -60,12 +67,12 @@ class CameraFragment : Fragment() {
         } else {
             startCamera()
         }
+    }
 
-//        iconCamera.setOnClickListener {
-//            if (!processingImage) { // 이미지 처리 중이 아닌 경우에만 실행
-//                takePhoto()
-//            }
-//        }
+    fun onCameraIconClicked() {
+        if (!processingImage) {
+            takePhoto()
+        }
     }
 
     private fun startCamera() {
@@ -99,7 +106,6 @@ class CameraFragment : Fragment() {
         val imageCapture = imageCapture ?: return
 
         processingImage = true // 이미지 처리 중으로 설정
-        // 버튼 비활성화
 
         imageCapture.takePicture(ContextCompat.getMainExecutor(requireContext()), object : ImageCapture.OnImageCapturedCallback() {
             override fun onCaptureSuccess(image: ImageProxy) {
@@ -113,7 +119,6 @@ class CameraFragment : Fragment() {
             override fun onError(exception: ImageCaptureException) {
                 Log.e("CameraFragment", "Photo capture failed: ${exception.message}", exception)
                 processingImage = false // 이미지 처리 실패 시 초기화
-                // 버튼 활성화
             }
         })
     }
@@ -222,23 +227,15 @@ class CameraFragment : Fragment() {
                 resultText = resultText.replace(Regex("\\s+"), "")
                 Log.d("OCR Result", resultText)
 
-                // 특정 텍스트가 포함되어 있는지 판단, 원재료 판단 코드 추가함
-                val keywords = listOf("유당", "여제", "계란", "우유", "분유") // 원하는 텍스트 추가
-                val foundKeywords = keywords.filter { resultText.contains(it, ignoreCase = true) }
-
-                if (foundKeywords.isNotEmpty()) {
-                    showTextPopup("포함된 원재료: ${foundKeywords.joinToString(", ")}")
-                } else {
-                    showTextPopup("육류, 우유, 계란이 포함되어 있지 않습니다")
-                }
-                processingImage = false
-                // 버튼 활성화
+                //TODO: OCR 정확도가 낮아 임시로 텍스트 적음
+                resultText = "야자유,팜유,혼합식용유,전분,버터,정제소금,기타과당,산도조절제,";
+                // 서버와 통신
+                checkIngredientsWithServer(resultText);
             }
             .addOnFailureListener { e ->
                 Log.e("OCR Error", e.message.toString())
                 showTextPopup("OCR Error. " + e.message.toString())
                 processingImage = false
-               // 버튼 활성화
             }
     }
 
@@ -274,4 +271,59 @@ class CameraFragment : Fragment() {
     companion object {
         private const val CAMERA_REQUEST_CODE = 100
     }
+
+    private fun checkIngredientsWithServer(ingredients: String) {
+        NetworkService.service.checkIngredients(ingredients)
+            .enqueue(object : Callback<IngredientsResponse> {
+                override fun onResponse(call: Call<IngredientsResponse>, response: Response<IngredientsResponse>) {
+                    if (response.isSuccessful) {
+                        val ingredientsResponse = response.body()
+                        if (ingredientsResponse != null) {
+                            handleServerResponse(ingredientsResponse)
+                        } else {
+                            showTextPopup("서버 응답이 비어있습니다.")
+                        }
+                    } else {
+                        showTextPopup("서버 오류 발생: ${response.code()}")
+                    }
+                    processingImage = false
+                }
+
+                override fun onFailure(call: Call<IngredientsResponse>, t: Throwable) {
+                    showTextPopup("네트워크 오류 발생: ${t.message}")
+                    Log.e("NetworkError", "Error during API call", t)
+                    processingImage = false
+                }
+            })
+    }
+
+    private fun handleServerResponse(response: IngredientsResponse) {
+        val ingredientsText = if (response.ingredients.isEmpty()) {
+            "모든 비건이 섭취 가능합니다."
+        } else {
+            "포함된 원재료: ${response.ingredients.entries.joinToString(", ") { "${it.key}(${it.value})" }}"
+        }
+
+        val veganTypesText = "적합한 비건 유형: ${response.suitableVeganTypes.joinToString(", ") { mapVeganTypeToString(it) }}"
+
+        showTextPopup("$ingredientsText\n$veganTypesText")
+    }
+
+    private fun mapVeganTypeToString(type: Int): String {
+        return when (type) {
+            1 -> "비건"
+            2 -> "락토"
+            3 -> "오보"
+            4 -> "락토 오보"
+            5 -> "페스코"
+            6 -> "폴로"
+            7 -> "플렉시테리안"
+            else -> "알 수 없음"
+        }
+    }
+
+
+
+
+
 }
