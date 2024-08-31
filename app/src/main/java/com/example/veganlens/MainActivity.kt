@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import com.example.veganlens.cameraPages.CameraFragment
 import com.example.veganlens.myPages.MyPageFragment
 
+
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         iconRecipe.setOnClickListener {
-            replaceFragment(VeganDiaryFragment())
+            replaceFragment(VeganLogFragment())
         }
     }
 
