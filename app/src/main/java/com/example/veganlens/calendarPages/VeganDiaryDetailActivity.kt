@@ -1,3 +1,4 @@
+/*
 package com.example.veganlens
 
 import android.net.Uri
@@ -18,7 +19,7 @@ class VeganDiaryDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_vegan_diary_detail)
+        setContentView(R.layout.fragment_vegan_diary_detail)
 
         tvDiaryDate = findViewById(R.id.tvDiaryDate)
         tvDiaryContent = findViewById(R.id.tvDiaryContent)
@@ -47,3 +48,4 @@ class VeganDiaryDetailActivity : AppCompatActivity() {
         }
     }
 }
+*/

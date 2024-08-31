@@ -27,15 +27,17 @@ class VeganCalendarFragment : Fragment() {
 
         // 달력 날짜 선택 이벤트
         calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
-            val intent = Intent(requireContext(), VeganDiaryDetailActivity::class.java)
+            val intent = Intent(requireContext(), VeganDiaryDetailFragment::class.java)
             intent.putExtra("date", "$year-${month + 1}-$dayOfMonth")
             startActivity(intent)
         }
 
         // 플로팅 버튼 (ImageView) 클릭 이벤트
         ivAddDiary.setOnClickListener {
-            val intent = Intent(requireContext(), AddVeganDiaryActivity::class.java)
-            startActivity(intent)
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container, VeganDiaryDetailFragment())
+            transaction.addToBackStack(null) // 뒤로 가기 버튼으로 돌아갈 수 있게 함
+            transaction.commit()
         }
 
         return view
