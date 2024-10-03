@@ -80,11 +80,13 @@
 
     <!-- 작성완료 버튼 -->
     <Button
-        android:id="@+id/btnComplete"
+        android:id="@+id/btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="작성완료"
         android:textColor="@android:color/black"
         android:background="#eaf2d3"
         android:layout_marginTop="16dp"/>
+
+
 </LinearLayout>
