@@ -225,7 +225,7 @@ class CameraFragment : Fragment() {
                 Log.d("OCR Result", resultText)
 
                 //TODO: OCR 정확도가 낮아 임시로 텍스트 적음
-                resultText = "야자유,팜유,혼합식용유,전분,버터,정제소금,기타과당,산도조절제,";
+                //resultText = "야자유,팜유,혼합식용유,전분,버터,정제소금,기타과당,산도조절제,";
                 // 서버와 통신
                 checkIngredientsWithServer(resultText);
             }
