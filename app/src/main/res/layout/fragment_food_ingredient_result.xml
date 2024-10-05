@@ -1,14 +1,15 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".cameraPages.FoodIngredientResultActivity">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/transparent"
+    android:padding="16dp">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_menu"
         android:padding="0dp">
 
         <LinearLayout
@@ -25,6 +26,7 @@
                 android:padding="16dp">
 
                 <!-- 결과 텍스트 -->
+
                 <TextView
                     android:id="@+id/tvResultTitle"
                     android:layout_width="wrap_content"
@@ -33,21 +35,31 @@
                     android:textSize="24sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:layout_marginBottom="8dp"/>
+                    android:layout_marginBottom="6dp"/>
+
+                <TextView
+                    android:id="@+id/tvDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="해당 단계의 비건이 먹을 수 있어요."
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvVeganLevel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="이 제품은 (비건레벨)이 먹을 수 있어요!"
+                    android:text="비건단계"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:textColor="@color/vegandarkgreen"
                     android:layout_marginBottom="8dp"/>
 
                 <!-- 수정 제보하기 -->
-                <TextView
-                    android:id="@+id/tvReportIssue"
+                <Button
+                    android:id="@+id/btnReportIssue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="수정 제보하기"
@@ -55,8 +67,6 @@
                     android:textColor="@color/black"
                     android:layout_gravity="end"
                     android:layout_marginBottom="16dp"
-                    android:clickable="true"
-                    android:focusable="true"
                     android:padding="14dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="4dp"/>
@@ -75,7 +85,7 @@
                     android:id="@+id/tvIngredientsTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="원재료 구성은"
+                    android:text="확인된 원재료는 다음과 같아요."
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
@@ -91,24 +101,17 @@
                     android:layout_marginBottom="16dp"/>
 
                 <!-- 비건 여부 확인 -->
-                <TextView
-                    android:id="@+id/tvVeganCheck"
-                    android:layout_width="wrap_content"
+
+                <!-- 닫기 버튼 추가 -->
+                <Button
+                    android:id="@+id/btnClose"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="원재료 중 (계란, 우유 등)이 확인되지 않았어요."
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginBottom="16dp"/>
+                    android:text="닫기"
+                    android:backgroundTint="@color/vegandarkgreen"
+                    android:textColor="@android:color/white"
+                    android:layout_marginTop="8dp"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-    <!-- 하단 메뉴바 -->
-    <include
-        layout="@layout/bottom_menu"
-        android:id="@+id/bottom_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
-</RelativeLayout>
+</LinearLayout>
