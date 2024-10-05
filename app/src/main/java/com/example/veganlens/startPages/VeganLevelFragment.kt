@@ -35,6 +35,7 @@ class VeganLevelFragment : Fragment() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
         setupCardView(binding.cardViewNotStarted, R.id.cardTextNotStarted, "아직 채식을 시작하지 않았어!\n채식에 대해 관심이 있어서 비건렌즈에 오게 되었어.")
+        setupCardView(binding.cardViewFlex, R.id.cardTextFlex, "플렉시테리언\n나는 식물성 음식을 주로 섭취하지만,\n가끔 고기나 생선을 먹어.")
         setupCardView(binding.cardViewPoloVegetarian, R.id.cardTextPoloVegetarian, "폴로 베지테리언\n나는 🍎🥬🥚🐟🍗만 먹어.")
         setupCardView(binding.cardViewPescoVegetarian, R.id.cardTextPescoVegetarian, "페스코 베지테리언\n나는 🍎🥬🥚🐟만 먹어.")
         setupCardView(binding.cardViewLactoOvoVegetarian, R.id.cardTextLactoOvoVegetarian, "락토 오보 베지테리언\n나는 🍎🥬🥚🥛만 먹어.")
@@ -52,6 +53,10 @@ class VeganLevelFragment : Fragment() {
                 Toast.makeText(requireContext(), "비건 레벨을 선택해 주세요.", Toast.LENGTH_SHORT).show()
             }
         }
+
+        // SharedPreferences에서 닉네임 가져와서 설정
+        val nickname = sharedPreferences.getString("nickname", "도토리") // 기본값을 "도토리"로 설정
+        binding.tvGreeting.text = "$nickname,\n 넌 어떤 비건을 하는 중이야?"
     }
 
     private fun setupCardView(cardView: View, textViewId: Int, veganLevel: String) {
@@ -80,6 +85,7 @@ class VeganLevelFragment : Fragment() {
 
     private fun resetSelections() {
         binding.cardViewNotStarted.setBackgroundResource(R.drawable.card_background)
+        binding.cardViewFlex.setBackgroundResource(R.drawable.card_background)
         binding.cardViewPoloVegetarian.setBackgroundResource(R.drawable.card_background)
         binding.cardViewPescoVegetarian.setBackgroundResource(R.drawable.card_background)
         binding.cardViewLactoOvoVegetarian.setBackgroundResource(R.drawable.card_background)
@@ -88,6 +94,7 @@ class VeganLevelFragment : Fragment() {
         binding.cardViewFruitTerrian.setBackgroundResource(R.drawable.card_background)
 
         binding.cardViewNotStarted.findViewById<TextView>(R.id.cardTextNotStarted).setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultGreen))
+        binding.cardViewFlex.findViewById<TextView>(R.id.cardTextFlex).setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultGreen))
         binding.cardViewPoloVegetarian.findViewById<TextView>(R.id.cardTextPoloVegetarian).setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultGreen))
         binding.cardViewPescoVegetarian.findViewById<TextView>(R.id.cardTextPescoVegetarian).setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultGreen))
         binding.cardViewLactoOvoVegetarian.findViewById<TextView>(R.id.cardTextLactoOvoVegetarian).setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultGreen))

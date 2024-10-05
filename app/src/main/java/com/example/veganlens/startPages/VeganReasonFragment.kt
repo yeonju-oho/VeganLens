@@ -66,6 +66,10 @@ class VeganReasonFragment : Fragment() {
                 findNavController().navigate(R.id.action_VeganReasonFragment_to_VeganLevelFragment)
             }
         }
+
+        // SharedPreferences에서 닉네임 가져와서 설정
+        val nickname = sharedPreferences.getString("nickname", "도토리") // 기본값을 "도토리"로 설정
+        binding.tvGreeting.text = "안녕! $nickname!\n비건을 왜 시작하게 되었어?"
     }
 
     private fun setupCardView(cardView: View, textView: TextView, index: Int) {
