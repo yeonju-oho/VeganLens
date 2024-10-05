@@ -13,7 +13,7 @@
     <string name="beauty_item_1_desc">Beauty Item 1</string>
     <string name="beauty_item_2_desc">Beauty Item 2</string>
     <string name="intake_image_description">[인테이크] 식료품 이미지 설명</string> <!-- 새로 추가된 문자열 리소스 -->
-
+    <string name="restaurant_image">식당 이미지</string>
     <string name="food_description">
         "&lt;b&gt;[인테이크] 이노센트 비건 팔라펠&lt;/b&gt;&lt;br/&gt;이노센트 비건 팔라펠은 주기적으로 생각나는 제품이에요."
     </string>
