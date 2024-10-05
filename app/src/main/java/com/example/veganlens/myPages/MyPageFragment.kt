@@ -1,5 +1,6 @@
 package com.example.veganlens.myPages
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,9 +14,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.example.veganlens.R
+import com.example.veganlens.network.DeleteUserRequest
+import com.example.veganlens.network.DeleteUserResponse
 import com.example.veganlens.network.NetworkService
 import com.example.veganlens.network.UpdateUserRequest
 import com.example.veganlens.network.UpdateUserResponse
+import com.example.veganlens.startPages.RegistrationActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,6 +29,7 @@ class MyPageFragment : Fragment() {
     private lateinit var tvIntro: TextView
     private lateinit var tvNickname: TextView
     private lateinit var tvVeganLevel: TextView
+    private lateinit var tvDeleteAccount: TextView
     private lateinit var ivProfileImage: ImageView
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var username: String
@@ -39,8 +44,8 @@ class MyPageFragment : Fragment() {
         // SharedPreferences 초기화
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
-        // SharedPreferences에서 닉네임, 비건 단계, 자기소개 불러오기
-        username = sharedPreferences.getString("nickname", "사용자닉네임") ?: "사용자닉네임"
+        // 전역 username 초기화
+        username = sharedPreferences.getString("nickname", "도토리") ?: "도토리"
         val veganLevel = sharedPreferences.getString("veganLevel", "폴로")
         val bio = sharedPreferences.getString("bio", "자기소개를 작성해 주세요") ?: "자기소개를 작성해 주세요"
 
@@ -49,6 +54,7 @@ class MyPageFragment : Fragment() {
         tvIntro = view.findViewById(R.id.tvIntro)
         tvVeganLevel = view.findViewById(R.id.tvVeganLevel)
         ivProfileImage = view.findViewById(R.id.ivProfileImage)
+        tvDeleteAccount = view.findViewById(R.id.tvDeleteAccount)
 
         // 텍스트뷰에 저장된 데이터 반영
         tvNickname.text = username
@@ -65,8 +71,77 @@ class MyPageFragment : Fragment() {
             showVeganTypeDialog()
         }
 
+        // 회원 탈퇴 클릭 이벤트
+        tvDeleteAccount.setOnClickListener {
+            showDeleteAccountDialog() // 회원 탈퇴 다이얼로그 호출
+        }
+
         return view
     }
+
+    // 회원 탈퇴 다이얼로그
+    private fun showDeleteAccountDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("회원탈퇴")
+            .setMessage("회원탈퇴하시겠습니까?")
+            .setPositiveButton("예") { dialog, _ ->
+                deleteUser(username) // 회원 탈퇴 API 호출
+                dialog.dismiss()
+            }
+            .setNegativeButton("아니오") { dialog, _ ->
+                dialog.dismiss() // 다이얼로그 닫기
+            }
+            .show()
+    }
+
+    private fun deleteUser(username: String) {
+        val request = DeleteUserRequest(username)
+
+        // 비동기 방식으로 요청 보내기
+        NetworkService.service.deleteUser(request).enqueue(object : Callback<DeleteUserResponse> {
+            override fun onResponse(
+                call: Call<DeleteUserResponse>,
+                response: Response<DeleteUserResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        println("Success: ${responseBody.message}")
+                        performLogout()
+                    } else {
+                        println("Failed: Null response body")
+                    }
+                } else {
+                    println("Failed: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<DeleteUserResponse>, t: Throwable) {
+                println("Error: ${t.message}")
+            }
+        })
+    }
+
+
+    // 로그아웃 처리 및 초기 화면으로 이동
+    private fun performLogout() {
+        // SharedPreferences에서 사용자 데이터 삭제 (로그아웃 처리)
+        try {
+            val editor = sharedPreferences.edit()
+            editor.clear()
+            editor.apply()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        // 로그인 화면으로 이동
+        val intent = Intent(requireContext(), RegistrationActivity::class.java) // LoginActivity는 앱의 로그인 화면이어야 함
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // 이전 액티비티 스택을 모두 지우고 새 작업으로 시작
+        startActivity(intent)
+
+        // 현재 액티비티 종료
+        requireActivity().finish()
+    }
+
 
     // 사용자 자기소개 수정 다이얼로그
     private fun showEditIntroDialog() {
