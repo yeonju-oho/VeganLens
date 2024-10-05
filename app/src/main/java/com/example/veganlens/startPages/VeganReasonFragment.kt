@@ -1,36 +1,39 @@
 package com.example.veganlens.startPages
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.example.veganlens.R
-import com.example.veganlens.databinding.FragmentVeganLevelBinding
 import com.example.veganlens.databinding.FragmentVeganReasonBinding
 
 class VeganReasonFragment : Fragment() {
 
     private lateinit var binding: FragmentVeganReasonBinding
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var cardViews: List<View>
     private lateinit var textViews: List<TextView>
-    private lateinit var isSelectedArray: BooleanArray
+    private var selectedIndex: Int = -1  // 선택된 카드뷰 인덱스를 저장하는 변수
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentVeganReasonBinding.inflate(inflater, container, false)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 각 카드뷰와 텍스트뷰를 리스트로 저장
         cardViews = listOf(
             binding.cardViewHealth,
             binding.cardViewMeat,
@@ -51,16 +54,15 @@ class VeganReasonFragment : Fragment() {
             binding.cardTextFamine
         )
 
-        isSelectedArray = BooleanArray(cardViews.size)
-
         // 카드뷰 설정
         for (i in cardViews.indices) {
             setupCardView(cardViews[i], textViews[i], i)
         }
 
-        // 다음 버튼 설정
+        // 다음 버튼 설정 (카드뷰가 선택되었을 때만 이동)
         binding.buttonNext.setOnClickListener {
-            if (isSelectedArray.any { it }) {
+            if (selectedIndex != -1) {
+                saveSelectedReasonToSharedPreferences(selectedIndex)
                 findNavController().navigate(R.id.action_VeganReasonFragment_to_VeganLevelFragment)
             }
         }
@@ -69,20 +71,41 @@ class VeganReasonFragment : Fragment() {
     private fun setupCardView(cardView: View, textView: TextView, index: Int) {
         cardView.setBackgroundResource(R.drawable.card_background)
         textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultGreen))
+
         cardView.setOnClickListener {
-            toggleSelection(cardView, textView, index)
+            selectCardView(index)
         }
     }
 
-    private fun toggleSelection(cardView: View, textView: TextView, index: Int) {
-        isSelectedArray[index] = !isSelectedArray[index]
-
-        if (isSelectedArray[index]) {
-            cardView.setBackgroundResource(R.drawable.card_selected_background)
-            textView.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
-        } else {
-            cardView.setBackgroundResource(R.drawable.card_background)
-            textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultGreen))
+    private fun selectCardView(index: Int) {
+        // 이미 선택된 카드가 있다면 그 카드의 선택을 해제
+        if (selectedIndex != -1 && selectedIndex != index) {
+            resetCardView(selectedIndex)
         }
+
+        // 선택된 카드 설정
+        selectedIndex = index
+        cardViews[index].setBackgroundResource(R.drawable.card_selected_background)
+        textViews[index].setTextColor(ContextCompat.getColor(requireContext(), android.R.color.white))
+    }
+
+    private fun resetCardView(index: Int) {
+        cardViews[index].setBackgroundResource(R.drawable.card_background)
+        textViews[index].setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultGreen))
+    }
+
+    private fun saveSelectedReasonToSharedPreferences(reasonIndex: Int) {
+        val reasonCode = when (reasonIndex) {
+            0 -> 1  // HEALTH_CONCERNS
+            1 -> 2  // ENVIRONMENTAL_HORMONES
+            2 -> 3  // LOVE_FOR_ANIMALS
+            3 -> 4  // RELIGIOUS_REASONS
+            4 -> 5  // ENVIRONMENTAL_CONCERNS
+            5 -> 6  // WEIGHT_LOSS
+            6 -> 7  // WORLD_HUNGER
+            else -> 1  // 기본값은 HEALTH_CONCERNS
+        }
+
+        sharedPreferences.edit().putInt("veganReason", reasonCode).apply()
     }
 }

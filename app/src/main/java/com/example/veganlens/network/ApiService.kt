@@ -33,6 +33,9 @@ interface ApiService {
 
     @POST("/api/check-user")
     fun checkUsername(@Body request: UsernameRequest): Call<UsernameResponse>
+
+    @POST("/api/add-user")
+    fun addUser(@Body request: AddUserRequest): Call<AddUserResponse>
 }
 
 data class AddIngredientRequest(
@@ -68,5 +71,20 @@ data class UsernameRequest(val username: String)
 // 응답에 사용할 데이터 클래스
 data class UsernameResponse(
     val exists: Boolean,
+    val message: String
+)
+
+//회원가입시, 닉네임 저장
+data class AddUserRequest(
+    val username: String,
+    val isAdmin: Boolean,
+    val profilePicture: String,
+    val bio: String,
+    val reason: Int,
+    val veganType: Int
+)
+
+data class AddUserResponse(
+    val success: Boolean,
     val message: String
 )
