@@ -11,7 +11,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.example.veganlens.R
 import com.example.veganlens.databinding.FragmentNicknameBinding
+import com.example.veganlens.network.ApiService
 import com.example.veganlens.network.NetworkService
+import com.example.veganlens.network.UsernameRequest
+import com.example.veganlens.network.UsernameResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,11 +35,7 @@ class NicknameFragment : Fragment() {
             val nickname = binding.editTextNickname.text.toString()
             if (nickname.isNotEmpty()) {
                 //TODO: ***DB API 호출해야 함***
-                //checkDB();
-
-                //TODO: 임시! checkDB 없이 Page 직접 이동되도록 코드 수정함
-                findNavController().navigate(R.id.action_NicknameFragment_to_VeganReasonFragment)
-
+                checkUsernameAvailability(nickname);
             } else {
                 binding.editTextNickname.error = "닉네임을 입력해 주세요."
             }
@@ -45,6 +44,61 @@ class NicknameFragment : Fragment() {
         return binding.root
     }
 
+    private fun checkUsernameAvailability(username: String) {
+        val api = NetworkService.service;
+        val request = UsernameRequest(username)
+
+        api.checkUsername(request).enqueue(object : Callback<UsernameResponse> {
+            override fun onResponse(
+                call: Call<UsernameResponse>,
+                response: Response<UsernameResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val result = response.body()
+                    if (result != null) {
+                        // 정상 수신
+                        if(result.exists)
+                        {
+                            // 닉네임 중복
+
+                        }
+                        else
+                        {
+                            // 닉네임 중복 아님
+                            // 서버에 저장
+
+
+
+                            // 페이지 이동 코드
+                            findNavController().navigate(R.id.action_NicknameFragment_to_VeganReasonFragment)
+                        }
+                    }
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "요청 실패: ${response.code()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UsernameResponse>, t: Throwable) {
+                Toast.makeText(
+                    requireContext(),
+                    "서버 오류 발생",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+    }
+
+
+
+
+
+
+
+//    //구 format 형식
 //    private fun checkDB(nickname: String) {
 //        NetworkService.service.checkNickname(CheckNicknameRequest(nickname))
 //        .enqueue(object : Callback<CheckNicknameResponse> {
