@@ -3,7 +3,7 @@
     <string name="ic_search">Search</string>
     <string name="ic_notifications">Notifications</string>
     <string name="ic_profile">Profile</string>
-    <string name="todays_vlog">Today's Vlog</string>
+    <string name="todays_vlog">Todays pos;s Vlog</string> <!-- 수정된 부분 -->
     <string name="popular_posts">Popular Posts</string>
     <string name="my_vegan_items">Trending Vegan Items</string>
     <string name="food_item_1">[한끼미식] 이노센트 비건 헬로베건</string>
@@ -12,12 +12,10 @@
     <string name="food_item_4">[쿄쿄] 두유 그릭요거트 플레인 100g</string>
     <string name="beauty_item_1_desc">Beauty Item 1</string>
     <string name="beauty_item_2_desc">Beauty Item 2</string>
-    <string name="intake_image_description">[인테이크] 식료품 이미지 설명</string> <!-- 새로 추가된 문자열 리소스 -->
+    <string name="intake_image_description">[인테이크] 식료품 이미지 설명</string>
+    <string name="restaurant_image">식당 이미지</string>
 
     <string name="food_description">
-        "&lt;b&gt;[인테이크] 이노센트 비건 팔라펠&lt;/b&gt;&lt;br/&gt;이노센트 비건 팔라펠은 주기적으로 생각나는 제품이에요."
+        "[인테이크] 이노센트 비건 팔라펠. 이노센트 비건 팔라펠은 주기적으로 생각나는 제품이에요."
     </string>
-
-
-
 </resources>

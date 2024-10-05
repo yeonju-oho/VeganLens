@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- 식당 제목 -->
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="제목"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingBottom="4dp" />
+
+    <!-- 식당 설명 -->
+    <TextView
+        android:id="@+id/descriptionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="설명"
+        android:textSize="16sp"
+        android:paddingBottom="8dp" />
+
+    <!-- 이미지들을 수평으로 나열하기 위한 LinearLayout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/detailImageView1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/restaurant_image" />
+
+        <ImageView
+            android:id="@+id/detailImageView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/restaurant_image" />
+
+        <ImageView
+            android:id="@+id/detailImageView3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/restaurant_image" />
+    </LinearLayout>
+</LinearLayout>
