@@ -5,8 +5,8 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.veganlens.cameraPages.CameraFragment
+import com.example.veganlens.mapPages.MapFragment
 import com.example.veganlens.myPages.MyPageFragment
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,10 +21,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomMenu() {
+        val iconMap: ImageView = findViewById(R.id.icon_map)
         val iconCamera: ImageView = findViewById(R.id.icon_camera)
         val iconCalendar: ImageView = findViewById(R.id.icon_calendar)
         val iconUser: ImageView = findViewById(R.id.icon_user)
         val iconRecipe: ImageView = findViewById(R.id.icon_recipe)
+
+
 
         iconCamera.setOnClickListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
@@ -45,6 +48,10 @@ class MainActivity : AppCompatActivity() {
 
         iconRecipe.setOnClickListener {
             replaceFragment(VeganLogFragment())
+        }
+
+        iconMap.setOnClickListener {
+            replaceFragment(MapFragment()) // MapFragment로 변경
         }
     }
 
