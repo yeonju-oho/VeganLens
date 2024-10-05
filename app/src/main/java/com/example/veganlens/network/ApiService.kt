@@ -9,6 +9,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.util.Date
 
 interface ApiService {
 
@@ -50,7 +51,16 @@ interface ApiService {
         @Body request: DeleteUserRequest
     ): Call<DeleteUserResponse>
 
+    @POST("/api/add-diary")
+    fun addDiray(@Body request: AddDiaryRequest): Call<AddDiaryResponse>
+
+    @GET("/api/user-diaries/{username}")
+    fun searchDiary(
+        @Path("username") username: String,
+        @Query("date") date: String? // Use @Query for query parameters
+    ): Call<DiarySearchResponse>
 }
+
 
 data class AddIngredientRequest(
     val category: String,
@@ -134,5 +144,36 @@ data class DeleteUserResponse(
 
 data class DeleteUserRequest(
     val username: String
+)
+
+data class AddDiaryRequest(
+    val username: String,
+    val title: String,
+    val content: String,
+    val images: List<String>,
+    val isPublic: Boolean
+)
+
+data class AddDiaryResponse(
+    val success: Boolean,
+    val message: String,
+    val diary: Diary
+)
+
+data class Diary(
+    val _id: String,
+    val username: String,
+    val userId : String,
+    val title: String,
+    val content: String,
+    val images: List<String>,
+    val publishedAt: Date,
+    val likes: List<String>,
+    val isPublic: Boolean
+)
+
+data class DiarySearchResponse(
+    val success: Boolean,
+    val diaries: List<Diary>
 )
 

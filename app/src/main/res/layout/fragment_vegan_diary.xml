@@ -7,6 +7,7 @@
 
     <!-- 이미지 및 제목 -->
     <ImageView
+        android:id="@+id/diaryImageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
@@ -14,12 +15,23 @@
         android:contentDescription="Vlog Image" />
 
     <TextView
+        android:id="@+id/diaryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="두부로 표현할 수 있는 최고의 맛! 해방촌 바이두부"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:textColor="#333"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/diaryDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="2022-xx-xx 00:00:00"
+        android:textSize="18sp"
         android:textColor="#333"
         android:layout_marginBottom="16dp" />
 
@@ -33,6 +45,7 @@
         android:layout_marginBottom="16dp">
 
         <ImageView
+            android:id="@+id/diaryUserPic"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_profile"
@@ -40,9 +53,19 @@
             android:layout_marginEnd="8dp" />
 
         <TextView
+            android:id="@+id/diaryUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="나 (공개)"
+            android:text="유저이름"
+            android:textSize="16sp"
+            android:textColor="#333"
+            android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/diaryPublic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(공개)"
             android:textSize="16sp"
             android:textColor="#333"
             android:gravity="center_vertical" />
@@ -50,6 +73,7 @@
 
     <!-- 본문 텍스트 -->
     <TextView
+        android:id="@+id/diaryContext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="남영역에서 용산02번 마을버스를 타고 올라오니 바이두부 바로 근처에서 내릴 수 있더라구요.

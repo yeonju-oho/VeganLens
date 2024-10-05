@@ -21,10 +21,10 @@ class VeganLogFragment : Fragment() {
         val vlogImage: ImageView = view.findViewById(R.id.vlog_image)
         vlogImage.setOnClickListener {
             // VeganDiaryFragment로 대체하여 화면 전환
-            parentFragmentManager.commit {
-                replace(R.id.fragment_container, VeganDiaryFragment())
-                addToBackStack(null) // 뒤로 가기 기능을 위해 백스택에 추가
-            }
+//            parentFragmentManager.commit {
+//                replace(R.id.fragment_container, VeganDiaryFragment())
+//                addToBackStack(null) // 뒤로 가기 기능을 위해 백스택에 추가
+//            }
         }
 
         return view

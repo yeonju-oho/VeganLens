@@ -1,51 +1,126 @@
-package com.example.veganlens
-
-import android.app.Activity
-import android.content.Intent
-import android.graphics.Bitmap
+import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
+import com.example.veganlens.DiaryDetailFragment
+import com.example.veganlens.R
+import com.example.veganlens.databinding.FragmentNicknameBinding
+import com.example.veganlens.databinding.FragmentVeganDiaryDetailBinding
+import com.example.veganlens.network.AddDiaryRequest
+import com.example.veganlens.network.AddDiaryResponse
+import com.example.veganlens.network.NetworkService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class VeganDiaryDetailFragment : Fragment() {
 
-    private lateinit var ivPhoto1: ImageView
-    private lateinit var etDiaryContent: EditText
-    private val REQUEST_IMAGE_CAPTURE = 1
+    private lateinit var binding: FragmentVeganDiaryDetailBinding
+    private lateinit var sharedPreferences : SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // 레이아웃 인플레이트
-        val view = inflater.inflate(R.layout.fragment_vegan_diary_detail, container, false)
+    ): View {
+        binding = FragmentVeganDiaryDetailBinding.inflate(inflater, container, false)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
-        // View 초기화
-        ivPhoto1 = view.findViewById(R.id.ivPhoto1)
-        etDiaryContent = view.findViewById(R.id.etDiaryContent)
+        // 현재 날짜 가져오기
+        val currentDate = Date()
+        // 날짜 포맷 설정
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        binding.tvDiaryDate.text = dateFormat.format(currentDate)
 
-        // 이미지뷰 클릭 리스너 설정
-        ivPhoto1.setOnClickListener {
-            // 갤러리에서 이미지 선택하는 인텐트 시작
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+        // 작성완료 버튼 클릭 이벤트
+        binding.btnSave.setOnClickListener {
+            val nickname = sharedPreferences.getString("nickname", "도토리") ?: "도토리"
+            val title = binding.etDiaryTitle.text.toString()
+            val content = binding.etDiaryContent.text.toString()
+
+            // 내용 있는지 확인
+            if (title.isNullOrBlank() || content.isNullOrBlank())
+                return@setOnClickListener
+
+            // 이미지 등록하고 URL 가져오기.
+            val imageUrls = checkUploadImages()
+
+            // DiaryRequest 객체 생성
+            val diaryRequest = AddDiaryRequest(
+                username = nickname,
+                title = title,
+                content = content,
+                images = imageUrls,
+                isPublic = true
+            )
+
+            // 서버로 전송
+            saveDiary(diaryRequest)
         }
 
-        return view
+        return binding.root
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    private fun saveDiary(diaryRequest: AddDiaryRequest) {
+        NetworkService.service.addDiray(diaryRequest).enqueue(object : Callback<AddDiaryResponse> {
+            override fun onResponse(call: Call<AddDiaryResponse>, response: Response<AddDiaryResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    // 성공적으로 저장
+                    Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK && data != null) {
-            val selectedImageUri = data.data
-            val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, selectedImageUri)
-            ivPhoto1.setImageBitmap(bitmap)
-        }
+                    // 작성완료된 페이지로 이동
+                    val fragment = DiaryDetailFragment().newInstance(response.body()!!.diary)
+                    val transaction = parentFragmentManager.beginTransaction() // 또는 requireActivity().supportFragmentManager
+                    transaction.replace(R.id.fragment_container, fragment) // fragment_container는 Fragment가 표시될 뷰의 ID입니다.
+                    //transaction.addToBackStack(null) // 뒤로 가기 스택에 추가
+                    transaction.commit()
+                } else {
+                    // 실패한 경우
+                    Toast.makeText(requireContext(), "일기 저장 실패", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<AddDiaryResponse>, t: Throwable) {
+                // 네트워크 또는 서버 오류 처리
+                Toast.makeText(requireContext(), "서버 오류 발생", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun checkUploadImages() : List<String>{
+        val imageUrls = mutableListOf<String>()
+
+// TODO: 구현 필요
+//        // ivPhoto1이 보여지고 있으면 업로드
+//        val photo1Uri: Uri? = getUriFromImageView(ivPhoto1)
+//        if (photo1Uri != null) {
+//            uploadImage(photo1Uri) { imageUrl ->
+//                imageUrls.add(imageUrl)
+//                //업로드 처리
+//            }
+//        }
+//
+//        // ivPhoto2가 보여지고 있으면 업로드
+//        if (ivPhoto2.visibility == View.VISIBLE) {
+//            val photo2Uri: Uri? = getUriFromImageView(ivPhoto2)
+//            if (photo2Uri != null) {
+//                uploadImage(photo2Uri) { imageUrl ->
+//                    imageUrls.add(imageUrl)
+//                    //업로드 처리
+//                }
+//            }
+//        }
+
+        return imageUrls;
     }
 }

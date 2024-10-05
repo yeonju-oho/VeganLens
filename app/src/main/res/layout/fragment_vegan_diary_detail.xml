@@ -27,6 +27,35 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="16dp"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="제목 입력"
+                android:layout_marginBottom="8dp"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/etDiaryTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#eaf2d3"
+                android:gravity="top"
+                android:hint="여기에 일기 제목을 입력하세요."
+                android:inputType="text"
+                android:maxLines="1"
+                android:minLines="1"
+                android:padding="8dp"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사진 등록"
+                android:layout_marginBottom="8dp"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
             <!-- 사진 보여주기 -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -80,7 +109,7 @@
 
     <!-- 작성완료 버튼 -->
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/btnSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="작성완료"
