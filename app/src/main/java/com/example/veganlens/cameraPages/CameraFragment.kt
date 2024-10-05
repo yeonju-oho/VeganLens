@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -28,8 +27,6 @@ import com.example.veganlens.network.NetworkService
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
-import kotlinx.coroutines.launch
-import retrofit2.await
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -299,14 +296,18 @@ class CameraFragment : Fragment() {
 
     private fun handleServerResponse(response: IngredientsResponse) {
         val ingredientsText = if (response.ingredients.isEmpty()) {
-            "모든 비건이 섭취 가능합니다."
+            "없음"
         } else {
-            "포함된 원재료: ${response.ingredients.entries.joinToString(", ") { "${it.key}(${it.value})" }}"
+            response.ingredients.entries.joinToString(", ") { "${it.key}(${it.value})" }
         }
 
-        val veganTypesText = "적합한 비건 유형: ${response.suitableVeganTypes.joinToString(", ") { mapVeganTypeToString(it) }}"
+        val veganTypesText = response.suitableVeganTypes.joinToString("\n") { mapVeganTypeToString(it)}
 
-        showTextPopup("$ingredientsText\n$veganTypesText")
+        // Create and display the custom dialog fragment
+        val foodIngredientResultFragment = FoodIngredientResultFragment()
+        foodIngredientResultFragment.setContent(ingredientsText, veganTypesText)
+
+        foodIngredientResultFragment.show(parentFragmentManager, "FoodIngredientResultFragment")
     }
 
     private fun mapVeganTypeToString(type: Int): String {
