@@ -4,6 +4,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -36,6 +37,13 @@ interface ApiService {
 
     @POST("/api/add-user")
     fun addUser(@Body request: AddUserRequest): Call<AddUserResponse>
+
+    @PATCH("/api/update-user/{username}")
+    fun updateUser(
+        @Path("username") username: String,
+        @Body request: UpdateUserRequest
+    ): Call<UpdateUserResponse>
+
 }
 
 data class AddIngredientRequest(
@@ -87,4 +95,27 @@ data class AddUserRequest(
 data class AddUserResponse(
     val success: Boolean,
     val message: String
+)
+
+//마이페이지 수정
+data class UpdateUserRequest(
+    val profilePicture: String?,
+    val bio: String?,
+    val reason: Int?,
+    val veganType: Int?
+)
+
+data class UpdateUserResponse(
+    val success: Boolean,
+    val message: String,
+    val user: UserData? // 업데이트된 사용자 정보
+)
+
+data class UserData(
+    val username: String,
+    val profilePicture: String,
+    val bio: String,
+    val reason: Int,
+    val veganType: Int,
+    val createdAt: String
 )

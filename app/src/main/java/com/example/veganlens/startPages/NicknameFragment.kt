@@ -83,7 +83,7 @@ class NicknameFragment : Fragment() {
         val editor = sharedPreferences.edit()
         editor.putString("nickname", nickname)  // 닉네임 저장
         editor.apply()  // 변경 사항을 비동기적으로 저장
-        Toast.makeText(requireContext(), "닉네임이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(requireContext(), "닉네임이 저장되었습니다.", Toast.LENGTH_SHORT).show()
     }
 }
 
