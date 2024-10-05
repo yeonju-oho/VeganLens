@@ -17,22 +17,40 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- 닉네임과 비건 레벨 -->
+            <!-- 닉네임과 회원 탈퇴 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_gravity="start">
 
+                <!-- 닉네임 TextView -->
                 <TextView
                     android:id="@+id/tvNickname"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="도토리"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:layout_marginBottom="8dp"/>
+
+                <!-- 회원 탈퇴 TextView -->
+                <TextView
+                    android:id="@+id/tvDeleteAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="회원 탈퇴"
+                    android:textColor="#808080"
+                    android:textSize="14sp"
+                    android:gravity="end"
+                    android:padding="14dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="1dp"
+                    android:clickable="true"
+                    android:focusable="true"/>
+            </LinearLayout>
 
                 <!-- 비건 레벨 TextView -->
                 <TextView
@@ -50,7 +68,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:minHeight="48dp"/>
-            </LinearLayout>
+
 
             <!-- 프로필 이미지와 비건일기, 팔로워, 팔로잉 -->
             <LinearLayout

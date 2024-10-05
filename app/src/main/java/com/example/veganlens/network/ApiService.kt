@@ -4,6 +4,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -43,6 +44,11 @@ interface ApiService {
         @Path("username") username: String,
         @Body request: UpdateUserRequest
     ): Call<UpdateUserResponse>
+
+    @HTTP(method = "DELETE", path = "/api/delete-user", hasBody = true)
+    fun deleteUser(
+        @Body request: DeleteUserRequest
+    ): Call<DeleteUserResponse>
 
 }
 
@@ -119,3 +125,14 @@ data class UserData(
     val veganType: Int,
     val createdAt: String
 )
+
+// 회원탈퇴
+data class DeleteUserResponse(
+    val success: String,
+    val message: String
+)
+
+data class DeleteUserRequest(
+    val username: String
+)
+
