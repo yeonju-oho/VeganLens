@@ -26,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
 
             //TODO: *** 테스트용. 회원가입 하고싶은 경우 주석 해제 ***
-            this.clearSharedPreferences();
+            //this.clearSharedPreferences();
 
             // SharedPreferences에서 회원가입 여부 확인
             val isRegistered = sharedPreferences.getBoolean("isRegistered", false)
