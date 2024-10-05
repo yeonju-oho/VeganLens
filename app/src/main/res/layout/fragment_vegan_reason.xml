@@ -37,7 +37,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="중복 선택도 가능해"
+                android:text="한개만 선택 가능해"
                 android:textSize="14sp"
                 android:layout_gravity="center_horizontal"
                 android:padding="8dp"

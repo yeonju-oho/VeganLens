@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
@@ -31,6 +31,7 @@ class VeganLevelFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // SharedPreferences 초기화
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
         setupCardView(binding.cardViewNotStarted, R.id.cardTextNotStarted, "아직 채식을 시작하지 않았어!\n채식에 대해 관심이 있어서 비건렌즈에 오게 되었어.")
@@ -39,13 +40,17 @@ class VeganLevelFragment : Fragment() {
         setupCardView(binding.cardViewLactoOvoVegetarian, R.id.cardTextLactoOvoVegetarian, "락토 오보 베지테리언\n나는 🍎🥬🥚🥛만 먹어.")
         setupCardView(binding.cardViewOvoVegetarian, R.id.cardTextOvoVegetarian, "오보 베지테리언\n나는 🍎🥬🥚만 먹어.")
         setupCardView(binding.cardViewLactoVegetarian, R.id.cardTextLactoVegetarian, "락토 베지테리언\n나는 🍎🥬🥛만 먹어.")
-        setupCardView(binding.cardViewFruitTerrian, R.id.cardTextFruitTerrian, "프루테리언\n나는 🍎만 먹어.")
+        setupCardView(binding.cardViewFruitTerrian, R.id.cardTextFruitTerrian, "비건\n나는 🍎🥬만 먹어.")
 
         binding.buttonNext.setOnClickListener {
             if (selectedVeganLevel != null) {
+                // 비건 레벨을 SharedPreferences에 저장
                 sharedPreferences.edit().putString("veganLevel", selectedVeganLevel).apply()
+                // 결과 화면으로 이동
+                findNavController().navigate(R.id.action_VeganLevelFragment_to_ResultFragment)
+            } else {
+                Toast.makeText(requireContext(), "비건 레벨을 선택해 주세요.", Toast.LENGTH_SHORT).show()
             }
-            findNavController().navigate(R.id.action_VeganLevelFragment_to_ResultFragment)
         }
     }
 
@@ -73,9 +78,6 @@ class VeganLevelFragment : Fragment() {
         cardView.tag = !isSelected
     }
 
-    fun getStringBeforeNewLine(input: String): String {
-        return input.substringBefore("\n")
-    }
     private fun resetSelections() {
         binding.cardViewNotStarted.setBackgroundResource(R.drawable.card_background)
         binding.cardViewPoloVegetarian.setBackgroundResource(R.drawable.card_background)
@@ -93,4 +95,9 @@ class VeganLevelFragment : Fragment() {
         binding.cardViewLactoVegetarian.findViewById<TextView>(R.id.cardTextLactoVegetarian).setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultGreen))
         binding.cardViewFruitTerrian.findViewById<TextView>(R.id.cardTextFruitTerrian).setTextColor(ContextCompat.getColor(requireContext(), R.color.defaultGreen))
     }
+
+    private fun getStringBeforeNewLine(input: String): String {
+        return input.substringBefore("\n").trim() // 공백을 제거
+    }
+
 }
