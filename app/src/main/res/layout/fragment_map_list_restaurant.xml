@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- 제목 -->
+
+    <!-- 식당 이미지 목록 -->
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="16dp"
+        android:text="강남/역삼/삼성/논현 비건식당"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <!-- 첫 번째 식당 이미지 -->
+        <ImageView
+            android:id="@+id/detailImageView1"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="8dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/map1" />
+
+        <!-- 두 번째 식당 이미지 -->
+        <ImageView
+            android:id="@+id/detailImageView2"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="8dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/map2" />
+
+        <!-- 세 번째 식당 이미지 -->
+        <ImageView
+            android:id="@+id/detailImageView3"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/map3"
+            android:layout_marginBottom="8dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

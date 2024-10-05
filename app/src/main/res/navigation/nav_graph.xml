@@ -51,4 +51,22 @@
         android:id="@+id/ResultFragment"
         android:name="com.example.veganlens.startPages.ResultFragment"
         tools:layout="@layout/fragment_result"/>
+
+    <fragment
+        android:id="@+id/MapFragment"
+        android:name="com.example.veganlens.mapPages.MapFragment"
+        tools:layout="@layout/fragment_map">
+        <action
+            android:id="@+id/action_MapFragment_to_MapListFragment"
+            app:destination="@id/MapListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/MapListFragment"
+        android:name="com.example.veganlens.mapPages.FragmentMapListRestaurant"
+        tools:layout="@layout/fragment_map_list_restaurant">
+    </fragment>
+
+
+
 </navigation>
