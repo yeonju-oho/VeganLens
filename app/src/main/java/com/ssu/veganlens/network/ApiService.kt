@@ -64,6 +64,12 @@ interface ApiService {
         @Path("username") username: String,
         @Query("date") date: String? // Use @Query for query parameters
     ): Call<DiarySearchResponse>
+
+    @GET("/api/public-diaries")
+    fun getAllDiaries(
+        //req 없음
+    ): Call<DiarySearchResponse>
+
 }
 
 
