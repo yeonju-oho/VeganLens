@@ -55,7 +55,7 @@ class DiaryDetailFragment : Fragment() {
         arguments?.let {
             diaryTitleTextView.text = it.getString("title")
             diaryContentTextView.text = it.getString("content")
-            userNameTextView.text = it.getString("username") //변환필요
+            userNameTextView.text = it.getString("username")
             publicTextView.text =  it.getString("isPublic")
             dateTextView.text = it.getString("publishedAt")
             // 사용자 프로필 이미지 로드 (임시 이미지로 대체 가능)
@@ -67,7 +67,7 @@ class DiaryDetailFragment : Fragment() {
             }
         }
 
-        //username이랑 userpic은 따로 가져와야 할듯?
+        //userpic은 따로 가져와야 할듯?
 
         return view
     }

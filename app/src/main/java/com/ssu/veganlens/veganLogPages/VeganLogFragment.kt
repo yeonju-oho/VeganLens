@@ -16,6 +16,8 @@ class VeganLogFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_veganlog, container, false)
 
+        // 여기서 전체 비건로그 데이터 가져와서 표시 해줘야 함
+
         // vlog_image에 대한 클릭 리스너 설정
         val vlogImage: ImageView = view.findViewById(R.id.vlog_image)
         vlogImage.setOnClickListener {

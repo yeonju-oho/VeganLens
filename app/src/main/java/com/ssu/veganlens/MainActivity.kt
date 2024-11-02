@@ -29,17 +29,9 @@ class MainActivity : AppCompatActivity() {
         val iconRecipe: ImageView = findViewById(R.id.icon_recipe)
 
 
-        // 지도와 레시피 아이콘을 보이지 않도록 설정
+        // 지도 보이지 않도록 설정
         iconMap.visibility = ImageView.GONE  // 또는 INVISIBLE
-        iconRecipe.visibility = ImageView.GONE  // 또는 INVISIBLE
-        iconCalendar.visibility = ImageView.GONE  // 또는 INVISIBLE
-
-        // 아이콘을 비활성화
         iconMap.isEnabled = false
-        iconRecipe.isEnabled = false
-        iconCalendar.isEnabled = false
-
-
 
         iconCamera.setOnClickListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)

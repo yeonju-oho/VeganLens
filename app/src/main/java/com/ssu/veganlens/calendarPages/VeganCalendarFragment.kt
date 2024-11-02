@@ -1,20 +1,26 @@
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.ssu.veganlens.DiaryDetailFragment
 import com.ssu.veganlens.R
 import com.ssu.veganlens.databinding.FragmentVeganCalendarBinding
 import com.ssu.veganlens.network.DiarySearchResponse
+import com.ssu.veganlens.network.GetUserResponse
 import com.ssu.veganlens.network.NetworkService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 class VeganCalendarFragment : Fragment() {
@@ -29,8 +35,10 @@ class VeganCalendarFragment : Fragment() {
         binding = FragmentVeganCalendarBinding.inflate(inflater, container, false)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
-        var duringTime = 200;
-        binding.tvDuringTime.text = "비건렌즈와 함께한 지 ${duringTime}일 째"
+        val username = sharedPreferences.getString("nickname", "도토리")
+        getUserData(username!!) { duringTime ->
+            binding.tvDuringTime.text = "비건렌즈와 함께한 지 ${duringTime + 1}일 째"
+        }
 
         // 캘린더 날짜 선택 리스너
         binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
@@ -42,7 +50,6 @@ class VeganCalendarFragment : Fragment() {
             // 날짜를 "yyyy-MM-dd" 형식으로 변환
             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val formattedDate = dateFormat.format(selectedDate)
-            val username = sharedPreferences.getString("nickname", "도토리")
 
             // 서버에 요청
             if (username != null) {
@@ -59,6 +66,54 @@ class VeganCalendarFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun getUserData(username: String, callback: (Long) -> Unit) {
+        // API 요청
+        NetworkService.service.getUser(username).enqueue(object : Callback<GetUserResponse> {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onResponse(call: Call<GetUserResponse>, response: Response<GetUserResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val createAt = response.body()!!.user?.createdAt
+
+                    // 생성 날짜가 null인 경우 0 반환
+                    if (createAt == null) {
+                        callback(0)
+                        return
+                    }
+
+                    // 날짜 형식에 맞는 DateTimeFormatter 생성
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+                    try {
+                        // 생성 날짜를 LocalDate로 변환
+                        val creationDate = LocalDate.parse(createAt, formatter)
+
+                        // 오늘 날짜 가져오기
+                        val today = LocalDate.now()
+
+                        // 생성 날짜와 오늘 날짜 간의 차이 계산
+                        val diff = ChronoUnit.DAYS.between(creationDate, today)
+
+                        // 계산된 차이를 콜백으로 반환
+                        callback(diff)
+                    } catch (e: Exception) {
+                        // 예외 발생 시 0 반환
+                        callback(0)
+                    }
+                } else {
+                    // 서버 오류 또는 사용자를 찾을 수 없는 경우 0 반환
+                    callback(0)
+                    Toast.makeText(requireContext(), "서버에서 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<GetUserResponse>, t: Throwable) {
+                // 네트워크 오류 발생 시 0 반환
+                callback(0)
+                Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun getDiaryForDate(username: String, date: String) {
@@ -89,6 +144,4 @@ class VeganCalendarFragment : Fragment() {
             }
         })
     }
-
-
 }

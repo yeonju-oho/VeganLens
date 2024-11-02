@@ -42,6 +42,7 @@ class VeganDiaryDetailFragment : Fragment() {
             val nickname = sharedPreferences.getString("nickname", "도토리") ?: "도토리"
             val title = binding.etDiaryTitle.text.toString()
             val content = binding.etDiaryContent.text.toString()
+            var isPublic = binding.switchPublic.isChecked
 
             // 내용 있는지 확인
             if (title.isNullOrBlank() || content.isNullOrBlank())
@@ -56,7 +57,7 @@ class VeganDiaryDetailFragment : Fragment() {
                 title = title,
                 content = content,
                 images = imageUrls,
-                isPublic = true
+                isPublic = isPublic
             )
 
             // 서버로 전송

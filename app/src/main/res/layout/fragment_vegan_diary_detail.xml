@@ -18,14 +18,33 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvDiaryDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2024-06-28"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvDiaryDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2024-06-28"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"/>
+
+                <Switch
+                    android:id="@+id/switchPublic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="공개"
+                    android:thumbTint="@color/switch_thumb_color"
+                    android:trackTint="@color/switch_track_color"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -96,14 +115,16 @@
             <EditText
                 android:id="@+id/etDiaryContent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:background="#eaf2d3"
-                android:padding="8dp"
-                android:hint="여기에 일기 내용을 입력하세요."
                 android:gravity="top"
+                android:hint="여기에 일기 내용을 입력하세요."
                 android:inputType="textMultiLine"
+                android:maxLines="30"
                 android:minLines="5"
-                android:maxLines="10"/>
+                android:padding="8dp" />
+
         </LinearLayout>
     </ScrollView>
 

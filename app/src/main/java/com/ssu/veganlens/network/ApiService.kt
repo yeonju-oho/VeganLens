@@ -51,6 +51,11 @@ interface ApiService {
         @Body request: DeleteUserRequest
     ): Call<DeleteUserResponse>
 
+    @GET("/api/get-user/{username}")
+    fun getUser(
+        @Path("username") username: String
+    ): Call<GetUserResponse>
+
     @POST("/api/add-diary")
     fun addDiray(@Body request: AddDiaryRequest): Call<AddDiaryResponse>
 
@@ -144,6 +149,11 @@ data class DeleteUserResponse(
 
 data class DeleteUserRequest(
     val username: String
+)
+
+data class GetUserResponse(
+    val success: Boolean,
+    val user: UserData? // 업데이트된 사용자 정보
 )
 
 data class AddDiaryRequest(
