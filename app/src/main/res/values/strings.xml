@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Vegan Log</string>
+    <string name="app_name">비건렌즈</string>
     <string name="ic_search">Search</string>
     <string name="ic_notifications">Notifications</string>
     <string name="ic_profile">Profile</string>

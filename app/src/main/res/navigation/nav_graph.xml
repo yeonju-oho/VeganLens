@@ -7,7 +7,7 @@
     <!-- 1단계: 닉네임 입력 프래그먼트 -->
     <fragment
         android:id="@+id/NicknameFragment"
-        android:name="com.example.veganlens.startPages.NicknameFragment"
+        android:name="com.ssu.veganlens.startPages.NicknameFragment"
         tools:layout="@layout/fragment_nickname">
         <action
             android:id="@+id/action_NicknameFragment_to_VeganReasonFragment"
@@ -21,7 +21,7 @@
     <!-- 2단계: 비건 이유 선택 프래그먼트 -->
     <fragment
         android:id="@+id/VeganReasonFragment"
-        android:name="com.example.veganlens.startPages.VeganReasonFragment"
+        android:name="com.ssu.veganlens.startPages.VeganReasonFragment"
         tools:layout="@layout/fragment_vegan_reason">
         <action
             android:id="@+id/action_VeganReasonFragment_to_VeganLevelFragment"
@@ -35,7 +35,7 @@
     <!-- 3단계: 비건 단계 선택 프래그먼트 -->
     <fragment
         android:id="@+id/VeganLevelFragment"
-        android:name="com.example.veganlens.startPages.VeganLevelFragment"
+        android:name="com.ssu.veganlens.startPages.VeganLevelFragment"
         tools:layout="@layout/fragment_vegan_level">
         <action
             android:id="@+id/action_VeganLevelFragment_to_ResultFragment"
@@ -49,24 +49,24 @@
     <!-- 4단계: 결과 확인 프래그먼트 -->
     <fragment
         android:id="@+id/ResultFragment"
-        android:name="com.example.veganlens.startPages.ResultFragment"
+        android:name="com.ssu.veganlens.startPages.ResultFragment"
         tools:layout="@layout/fragment_result"/>
+
 
     <fragment
         android:id="@+id/MapFragment"
-        android:name="com.example.veganlens.mapPages.MapFragment"
-        tools:layout="@layout/fragment_map">
+        android:name="com.ssu.veganlens.mapPages.MapFragment"
+        tools:layout="@layout/fragment_map"
+        tools:visibility="gone">
         <action
             android:id="@+id/action_MapFragment_to_MapListFragment"
-            app:destination="@id/MapListFragment" />
+            app:destination="@id/MapListFragment" /> <!-- MapFragment를 숨김 처리 -->
     </fragment>
 
     <fragment
         android:id="@+id/MapListFragment"
-        android:name="com.example.veganlens.mapPages.FragmentMapListRestaurant"
+        android:name="com.ssu.veganlens.mapPages.FragmentMapListRestaurant"
         tools:layout="@layout/fragment_map_list_restaurant">
     </fragment>
-
-
 
 </navigation>
