@@ -4,14 +4,14 @@ plugins {
 }
 
 android {
-    namespace = "com.example.veganlens"
+    namespace = "com.ssu.veganlens"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.veganlens"
+        applicationId = "com.ssu.veganlens"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
+        versionCode = 7
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
