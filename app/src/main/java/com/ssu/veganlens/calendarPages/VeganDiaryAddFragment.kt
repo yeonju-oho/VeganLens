@@ -1,3 +1,5 @@
+package com.ssu.veganlens.calendarPages
+
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,12 +8,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
-import com.ssu.veganlens.DiaryDetailFragment
 import com.ssu.veganlens.R
-import com.ssu.veganlens.databinding.FragmentVeganDiaryDetailBinding
+import com.ssu.veganlens.databinding.FragmentVeganDiaryAddBinding
 import com.ssu.veganlens.network.AddDiaryRequest
 import com.ssu.veganlens.network.AddDiaryResponse
 import com.ssu.veganlens.network.NetworkService
+import com.ssu.veganlens.veganLogPages.VeganDiaryFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,16 +21,16 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class VeganDiaryDetailFragment : Fragment() {
+class VeganDiaryAddFragment : Fragment() {
 
-    private lateinit var binding: FragmentVeganDiaryDetailBinding
+    private lateinit var binding: FragmentVeganDiaryAddBinding
     private lateinit var sharedPreferences : SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentVeganDiaryDetailBinding.inflate(inflater, container, false)
+        binding = FragmentVeganDiaryAddBinding.inflate(inflater, container, false)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
         // 현재 날짜 가져오기
@@ -75,7 +77,7 @@ class VeganDiaryDetailFragment : Fragment() {
                     Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
 
                     // 작성완료된 페이지로 이동
-                    val fragment = DiaryDetailFragment().newInstance(response.body()!!.diary)
+                    val fragment = VeganDiaryFragment().newInstance(response.body()!!.diary)
                     val transaction = parentFragmentManager.beginTransaction() // 또는 requireActivity().supportFragmentManager
                     transaction.replace(R.id.fragment_container, fragment) // fragment_container는 Fragment가 표시될 뷰의 ID입니다.
                     //transaction.addToBackStack(null) // 뒤로 가기 스택에 추가

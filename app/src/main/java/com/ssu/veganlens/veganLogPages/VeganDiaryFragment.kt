@@ -1,4 +1,4 @@
-package com.ssu.veganlens
+package com.ssu.veganlens.veganLogPages
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import com.ssu.veganlens.network.Diary
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class DiaryDetailFragment : Fragment() {
+class VeganDiaryFragment : Fragment() {
 
     private lateinit var diaryTitleTextView: TextView
     private lateinit var diaryContentTextView: TextView
@@ -23,8 +23,8 @@ class DiaryDetailFragment : Fragment() {
     private lateinit var diaryImageView: ImageView
 
     // Diary 객체를 받아오는 함수
-    fun newInstance(diary: Diary): DiaryDetailFragment {
-        val fragment = DiaryDetailFragment()
+    fun newInstance(diary: Diary): VeganDiaryFragment {
+        val fragment = VeganDiaryFragment()
         val args = Bundle()
         args.putString("title", diary.title)
         args.putString("content", diary.content)

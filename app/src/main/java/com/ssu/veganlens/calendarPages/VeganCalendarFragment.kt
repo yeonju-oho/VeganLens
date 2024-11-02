@@ -1,3 +1,5 @@
+package com.ssu.veganlens.calendarPages
+
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
@@ -7,13 +9,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
-import com.ssu.veganlens.DiaryDetailFragment
 import com.ssu.veganlens.R
 import com.ssu.veganlens.databinding.FragmentVeganCalendarBinding
 import com.ssu.veganlens.network.DiarySearchResponse
 import com.ssu.veganlens.network.GetUserResponse
 import com.ssu.veganlens.network.NetworkService
+import com.ssu.veganlens.veganLogPages.VeganDiaryFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -60,7 +63,7 @@ class VeganCalendarFragment : Fragment() {
         // 플로팅 버튼 (ImageView) 클릭 이벤트
         binding.ivAddDiary.setOnClickListener {
             val transaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, VeganDiaryDetailFragment())
+            transaction.replace(R.id.fragment_container, VeganDiaryAddFragment())
             transaction.addToBackStack(null) // 뒤로 가기 버튼으로 돌아갈 수 있게 함
             transaction.commit()
         }
@@ -123,10 +126,10 @@ class VeganCalendarFragment : Fragment() {
                 if (response.isSuccessful && response.body() != null) {
                     if (response.body()!!.diaries.isNotEmpty()) {
                         // 일기가 존재하면 상세 화면으로 이동
-                        val fragment = DiaryDetailFragment().newInstance(response.body()!!.diaries[0])
+                        val fragment = VeganDiaryFragment().newInstance(response.body()!!.diaries[0])
                         val transaction = parentFragmentManager.beginTransaction() // 또는 requireActivity().supportFragmentManager
                         transaction.replace(R.id.fragment_container, fragment) // fragment_container는 Fragment가 표시될 뷰의 ID입니다.
-                        transaction.addToBackStack(null) // 뒤로 가기 스택에 추가
+                        //transaction.addToBackStack(null) // 뒤로 가기 스택에 추가
                         transaction.commit()
                     } else {
                         // 일기가 없으면 아무 일도 하지 않음

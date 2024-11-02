@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#eaf2d3"
-    tools:context=".VeganCalendarFragment">
+    android:background="#eaf2d3">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

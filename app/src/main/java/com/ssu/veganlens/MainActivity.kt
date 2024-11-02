@@ -1,6 +1,5 @@
 package com.ssu.veganlens
 
-import VeganCalendarFragment
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +7,8 @@ import androidx.fragment.app.Fragment
 import com.ssu.veganlens.cameraPages.CameraFragment
 import com.ssu.veganlens.mapPages.MapFragment
 import com.ssu.veganlens.myPages.MyPageFragment
+import com.ssu.veganlens.calendarPages.VeganCalendarFragment
+import com.ssu.veganlens.veganLogPages.VeganLogFragment
 
 class MainActivity : AppCompatActivity() {
 

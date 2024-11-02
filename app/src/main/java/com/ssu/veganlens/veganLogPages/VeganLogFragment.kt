@@ -1,4 +1,4 @@
-package com.ssu.veganlens
+package com.ssu.veganlens.veganLogPages
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -13,7 +13,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
+import androidx.navigation.fragment.findNavController
+import com.ssu.veganlens.R
 import com.ssu.veganlens.network.Diary
 import com.ssu.veganlens.network.DiarySearchResponse
 import com.ssu.veganlens.network.NetworkService
@@ -72,6 +73,9 @@ class VeganLogFragment : Fragment() {
                 if (response.isSuccessful && response.body() != null) {
                     diaries = response.body()!!.diaries // List<Diary>에 할당
 
+                    // 다이어리를 publishedAt 날짜 기준으로 최근부터 정렬
+                    diaries = diaries.sortedByDescending { it.publishedAt }
+
                     if (diaries.isNotEmpty()) {
                         loadPosts() // 게시물 로드
                     } else {
@@ -104,11 +108,20 @@ class VeganLogFragment : Fragment() {
 
             // 이미지를 설정
             if (diary.images.isNotEmpty()) {
-                Glide.with(requireContext())
-                    .load(diary.images[0])
-                    .into(imageView)
+                //TODO: 여기서 실제 이미지 설정하도록 해야 함
             }
             titleTextView.text = diary.title
+
+            // 아이템 클릭 리스너 추가
+            postView.setOnClickListener {
+                // 페이지 이동
+                val fragment = VeganDiaryFragment().newInstance(diary)
+                val transaction = parentFragmentManager.beginTransaction() // 또는 requireActivity().supportFragmentManager
+                transaction.replace(R.id.fragment_container, fragment) // fragment_container는 Fragment가 표시될 뷰의 ID입니다.
+                //transaction.addToBackStack(null) // 뒤로 가기 스택에 추가
+                transaction.commit()
+            }
+
             gridLayout.addView(postView)
         }
 
