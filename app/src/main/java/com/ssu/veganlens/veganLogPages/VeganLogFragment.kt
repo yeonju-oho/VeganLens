@@ -11,9 +11,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.ssu.veganlens.R
 import com.ssu.veganlens.network.Diary
 import com.ssu.veganlens.network.DiarySearchResponse
@@ -102,7 +100,7 @@ class VeganLogFragment : Fragment() {
         val currentDiaries = diaries.subList(start, end)
 
         for ((index, diary) in currentDiaries.withIndex()) {
-            val postView = LayoutInflater.from(requireContext()).inflate(R.layout.item_post, gridLayout, false)
+            val postView = LayoutInflater.from(requireContext()).inflate(R.layout.diary_post_h, gridLayout, false)
             val imageView = postView.findViewById<ImageView>(R.id.main_image)
             val titleTextView = postView.findViewById<TextView>(R.id.title_text)
 

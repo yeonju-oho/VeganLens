@@ -6,8 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
@@ -43,6 +46,9 @@ class VeganCalendarFragment : Fragment() {
             binding.tvDuringTime.text = "비건렌즈와 함께한 지 ${duringTime + 1}일 째"
         }
 
+        // 오늘 날짜의 데이터 가져옴
+        getDiaryForDate(username, Calendar.getInstance().time)
+
         // 캘린더 날짜 선택 리스너
         binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
             // 선택한 날짜를 포맷
@@ -50,14 +56,8 @@ class VeganCalendarFragment : Fragment() {
                 set(year, month, dayOfMonth)
             }.time
 
-            // 날짜를 "yyyy-MM-dd" 형식으로 변환
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val formattedDate = dateFormat.format(selectedDate)
-
             // 서버에 요청
-            if (username != null) {
-                getDiaryForDate(username, formattedDate)
-            }
+            getDiaryForDate(username, selectedDate)
         }
 
         // 플로팅 버튼 (ImageView) 클릭 이벤트
@@ -119,21 +119,52 @@ class VeganCalendarFragment : Fragment() {
         })
     }
 
-    private fun getDiaryForDate(username: String, date: String) {
+    private fun getDiaryForDate(username: String, selectedDate: Date) {
+
+        // 날짜를 "yyyy-MM-dd" 형식으로 변환
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date = dateFormat.format(selectedDate)
+
+        //모든 아이템 제거
+        binding.contextLayout.removeAllViews();
+
         // API 요청
         NetworkService.service.searchDiary(username, date).enqueue(object : Callback<DiarySearchResponse> {
             override fun onResponse(call: Call<DiarySearchResponse>, response: Response<DiarySearchResponse>) {
                 if (response.isSuccessful && response.body() != null) {
                     if (response.body()!!.diaries.isNotEmpty()) {
-                        // 일기가 존재하면 상세 화면으로 이동
-                        val fragment = VeganDiaryFragment().newInstance(response.body()!!.diaries[0])
-                        val transaction = parentFragmentManager.beginTransaction() // 또는 requireActivity().supportFragmentManager
-                        transaction.replace(R.id.fragment_container, fragment) // fragment_container는 Fragment가 표시될 뷰의 ID입니다.
-                        //transaction.addToBackStack(null) // 뒤로 가기 스택에 추가
-                        transaction.commit()
+                        // 텍스트 변경
+                        binding.tvToday.text = "${date}\t 작성한 게시글 목록"
+                        binding.tvToday.visibility = View.VISIBLE
+
+                        // 일기가 존재하면 하단에 등록해줌
+                        for (diary in response.body()!!.diaries) {
+                            val postView = LayoutInflater.from(requireContext()).inflate(R.layout.diary_post_v, binding.contextLayout, false)
+                            val imageView = postView.findViewById<ImageView>(R.id.main_image)
+                            val titleTextView = postView.findViewById<TextView>(R.id.title_text)
+
+                            // 이미지를 설정
+                            if (diary.images.isNotEmpty()) {
+                                //TODO: 여기서 실제 이미지 설정하도록 해야 함
+                            }
+                            titleTextView.text = diary.title
+
+                            // 아이템 클릭 리스너 추가 (클릭시 페이지 이동)
+                            postView.setOnClickListener {
+                                // 페이지 이동
+                                val fragment = VeganDiaryFragment().newInstance(diary)
+                                val transaction = parentFragmentManager.beginTransaction() // 또는 requireActivity().supportFragmentManager
+                                transaction.replace(R.id.fragment_container, fragment) // fragment_container는 Fragment가 표시될 뷰의 ID입니다.
+                                //transaction.addToBackStack(null) // 뒤로 가기 스택에 추가
+                                transaction.commit()
+                            }
+                            // 인플레이트한 뷰를 contextLayout에 추가합니다.
+                            binding.contextLayout.addView(postView)
+                        }
                     } else {
                         // 일기가 없으면 아무 일도 하지 않음
-                        Toast.makeText(requireContext(), "해당 날짜의 일기가 없습니다.", Toast.LENGTH_SHORT).show()
+                        binding.tvToday.visibility = View.GONE
+                        // Toast.makeText(requireContext(), "해당 날짜의 일기가 없습니다.", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     // 서버 오류 또는 사용자를 찾을 수 없는 경우
@@ -147,4 +178,5 @@ class VeganCalendarFragment : Fragment() {
             }
         })
     }
+
 }
