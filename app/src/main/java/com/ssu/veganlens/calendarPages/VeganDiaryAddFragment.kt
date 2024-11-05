@@ -77,7 +77,7 @@ class VeganDiaryAddFragment : Fragment() {
                     Toast.makeText(requireContext(), response.body()?.message, Toast.LENGTH_SHORT).show()
 
                     // 작성완료된 페이지로 이동
-                    val fragment = VeganDiaryFragment().newInstance(response.body()!!.diary)
+                    val fragment = VeganDiaryFragment().newInstance(response.body()!!.diary, 1)
                     val transaction = parentFragmentManager.beginTransaction() // 또는 requireActivity().supportFragmentManager
                     transaction.replace(R.id.fragment_container, fragment) // fragment_container는 Fragment가 표시될 뷰의 ID입니다.
                     //transaction.addToBackStack(null) // 뒤로 가기 스택에 추가

@@ -152,10 +152,10 @@ class VeganCalendarFragment : Fragment() {
                             // 아이템 클릭 리스너 추가 (클릭시 페이지 이동)
                             postView.setOnClickListener {
                                 // 페이지 이동
-                                val fragment = VeganDiaryFragment().newInstance(diary)
+                                val fragment = VeganDiaryFragment().newInstance(diary, 1)
                                 val transaction = parentFragmentManager.beginTransaction() // 또는 requireActivity().supportFragmentManager
                                 transaction.replace(R.id.fragment_container, fragment) // fragment_container는 Fragment가 표시될 뷰의 ID입니다.
-                                //transaction.addToBackStack(null) // 뒤로 가기 스택에 추가
+                                transaction.addToBackStack(null) // 뒤로 가기 스택에 추가
                                 transaction.commit()
                             }
                             // 인플레이트한 뷰를 contextLayout에 추가합니다.

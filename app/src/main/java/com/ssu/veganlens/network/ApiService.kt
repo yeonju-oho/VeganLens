@@ -70,6 +70,11 @@ interface ApiService {
         //req 없음
     ): Call<DiarySearchResponse>
 
+    @DELETE("/api/delete-diary/{id}")
+    fun deleteDiary(
+        @Path("id") id: String,
+    ): Call<DeleteDiaryResponse>
+
 }
 
 
@@ -193,3 +198,7 @@ data class DiarySearchResponse(
     val diaries: List<Diary>
 )
 
+data class DeleteDiaryResponse(
+    val success: Boolean,
+    val message: String
+)

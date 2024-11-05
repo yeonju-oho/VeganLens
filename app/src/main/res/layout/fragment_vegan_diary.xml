@@ -11,78 +11,120 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/vlog_image"
+        android:src="@drawable/logo"
         android:contentDescription="Vlog Image" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="2dp"
+        android:background="#FFFFFF"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <!-- 프로필 사진 -->
+        <ImageView
+            android:id="@+id/diaryUserPic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_profile"
+            android:contentDescription="User Profile Image"
+            android:layout_marginEnd="12dp"
+            android:layout_gravity="center_vertical" />
+
+        <!-- 두 줄을 감싸는 Vertical LinearLayout -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- 첫 번째 줄: 유저 이름, 수정 버튼 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/diaryUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="유저 이름"
+                    android:textSize="16sp"
+                    android:textColor="#333"
+                    android:textStyle="bold"
+                    android:layout_marginRight="8dp"
+                    android:gravity="center_vertical" />
+
+                <TextView
+                    android:id="@+id/diaryPublic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="(공개)"
+                    android:textSize="16sp"
+                    android:textColor="#333"
+                    android:gravity="center_vertical" />
+
+                <Button
+                    android:id="@+id/editButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_button"
+                    android:minHeight="0dp"
+                    android:layout_margin="2dp"
+                    android:text="수정" />
+            </LinearLayout>
+
+            <!-- 두 번째 줄: 날짜, 삭제 버튼 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/diaryDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="2024-10-01 17:04"
+                    android:textSize="14sp"
+                    android:textColor="#666"
+                    android:gravity="center_vertical" />
+
+                <Button
+                    android:id="@+id/deleteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_button"
+                    android:minHeight="0dp"
+                    android:layout_margin="2dp"
+                    android:text="삭제" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 제목 -->
     <TextView
         android:id="@+id/diaryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="두부로 표현할 수 있는 최고의 맛! 해방촌 바이두부"
+        android:text="제목을 여기에 출력합니다."
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="#333"
         android:layout_marginBottom="16dp" />
-
-    <TextView
-        android:id="@+id/diaryDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:text="2022-xx-xx 00:00:00"
-        android:textSize="18sp"
-        android:textColor="#333"
-        android:layout_marginBottom="16dp" />
-
-    <!-- 사용자 정보 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:background="#FFFFFF"
-        android:layout_marginBottom="16dp">
-
-        <ImageView
-            android:id="@+id/diaryUserPic"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_profile"
-            android:contentDescription="User Profile Image"
-            android:layout_marginEnd="8dp" />
-
-        <TextView
-            android:id="@+id/diaryUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="유저이름"
-            android:textSize="16sp"
-            android:textColor="#333"
-            android:gravity="center_vertical" />
-
-        <TextView
-            android:id="@+id/diaryPublic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(공개)"
-            android:textSize="16sp"
-            android:textColor="#333"
-            android:layout_marginStart="8dp"
-            android:gravity="center_vertical" />
-    </LinearLayout>
 
     <!-- 본문 텍스트 -->
     <TextView
         android:id="@+id/diaryContext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="남영역에서 용산02번 마을버스를 타고 올라오니 바이두부 바로 근처에서 내릴 수 있더라구요.
-
-
-
-        토요일 1시쯤 도착했을 때 딱 바쁜 타임이 끝나고 한 템포 쉬시는 듯 했어요. 러쉬 경리단길이랑 협업 중이신가봐요. 매장 한켠에 놓여진 계수대에서 러쉬 비누가 있었는 데 제가 너무 좋아하는 카마 향이 있어서 반갑더라구요!
-바이두부랩, 브로콜리두부강정 2가지를 주문했어요. 바두랩을 너무너무 먹어보고 싶었는 데 다행히 남아있어서 기뻤답니다! 엄마랑 같이 갔는 데 엄마가 정말 좋아하셨어요!"
+        android:text="내용을 여기에 출력합니다."
         android:textSize="16sp"
         android:textColor="#333" />
 
