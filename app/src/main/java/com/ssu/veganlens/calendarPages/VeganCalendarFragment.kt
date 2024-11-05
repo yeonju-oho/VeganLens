@@ -85,12 +85,12 @@ class VeganCalendarFragment : Fragment() {
                         return
                     }
 
-                    // 날짜 형식에 맞는 DateTimeFormatter 생성
-                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-
                     try {
+                        val dateOnly = createAt.substring(0, 10)  // 첫 10자만 가져옴 (yyyy-MM-dd 부분만 사용)
+                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
                         // 생성 날짜를 LocalDate로 변환
-                        val creationDate = LocalDate.parse(createAt, formatter)
+                        val creationDate = LocalDate.parse(dateOnly, formatter)
 
                         // 오늘 날짜 가져오기
                         val today = LocalDate.now()
