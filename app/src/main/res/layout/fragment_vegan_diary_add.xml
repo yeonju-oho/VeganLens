@@ -29,6 +29,7 @@
                     android:text="2024-06-28"
                     android:textSize="20sp"
                     android:textStyle="bold"
+                    android:layout_marginBottom="16dp"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"/>
 
@@ -65,6 +66,7 @@
                 android:maxLines="1"
                 android:minLines="1"
                 android:padding="8dp"
+                android:maxLength="50"
                 android:layout_marginBottom="16dp" />
 
             <TextView
@@ -77,6 +79,7 @@
 
             <!-- 사진 보여주기 -->
             <LinearLayout
+                android:id="@+id/ivLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -97,10 +100,17 @@
                     android:layout_height="100dp"
                     android:background="#eaf2d3"
                     android:contentDescription="사진2"
-                    android:layout_marginEnd="8dp"
-                    android:visibility="gone"/> <!-- 필요 시 표시 -->
+                    android:layout_marginEnd="8dp"/> <!-- 필요 시 표시 -->
 
-                <!-- 다른 이미지뷰도 필요 시 추가 -->
+                <ImageView
+                    android:id="@+id/ivPhoto3"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="#eaf2d3"
+                    android:contentDescription="사진2"
+                    android:layout_marginEnd="8dp"/> <!-- 필요 시 표시 -->
+
+                <!-- 일단 세개까지만 등록할 수 있게 함-->
             </LinearLayout>
 
             <!-- 내용 입력 -->
@@ -112,18 +122,23 @@
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
-            <EditText
-                android:id="@+id/etDiaryContent"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="#eaf2d3"
-                android:gravity="top"
-                android:hint="여기에 일기 내용을 입력하세요."
-                android:inputType="textMultiLine"
-                android:maxLines="30"
-                android:minLines="5"
-                android:padding="8dp" />
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/etDiaryContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="#eaf2d3"
+                    android:gravity="top"
+                    android:hint="여기에 일기 내용을 입력하세요."
+                    android:inputType="textMultiLine"
+                    android:maxLines="30"
+                    android:minLines="5"
+                    android:padding="8dp" />
+            </ScrollView>
 
         </LinearLayout>
     </ScrollView>
@@ -134,8 +149,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="작성완료"
-        android:textColor="@android:color/black"
-        android:background="#eaf2d3"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:background="@color/defaultGreen"
         android:layout_marginTop="16dp"/>
 
 

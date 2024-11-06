@@ -37,7 +37,7 @@
                     android:id="@+id/tvDuringTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="비건렌즈와 함께한 지 253일 째"
+                    android:text="비건렌즈와 함께한 지 x일 째"
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:layout_marginTop="8dp"/>
@@ -67,6 +67,7 @@
                 android:layout_marginBottom="4dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 android:textColor="@color/defaultGreen"/>
 
             <ScrollView
@@ -93,10 +94,12 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_gravity="end|bottom"
-        android:layout_marginRight="34dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/circular_background"
         android:src="@drawable/ic_add"
-        android:background="@drawable/ic_add"
         android:elevation="8dp"
+        android:outlineProvider="background"
+        android:clipToOutline="false"
         android:scaleType="centerInside"/>
 </FrameLayout>

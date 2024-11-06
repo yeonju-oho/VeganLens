@@ -10,6 +10,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -38,6 +40,9 @@ class CameraFragment : Fragment() {
 
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var previewView: PreviewView
+    private lateinit var progressBar : ProgressBar
+    private lateinit var captured_image : ImageView
+
     private var imageCapture: ImageCapture? = null
     private var processingImage = false // 이미지 처리 중 여부를 나타내는 변수
 
@@ -53,6 +58,7 @@ class CameraFragment : Fragment() {
 
         cameraExecutor = Executors.newSingleThreadExecutor()
         previewView = view.findViewById(R.id.camera_frame)
+        progressBar = view.findViewById(R.id.progressBar)
 
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
             != PackageManager.PERMISSION_GRANTED
@@ -103,6 +109,7 @@ class CameraFragment : Fragment() {
         val imageCapture = imageCapture ?: return
 
         processingImage = true // 이미지 처리 중으로 설정
+        progressBar.visibility = View.VISIBLE
 
         imageCapture.takePicture(ContextCompat.getMainExecutor(requireContext()), object : ImageCapture.OnImageCapturedCallback() {
             override fun onCaptureSuccess(image: ImageProxy) {
@@ -115,9 +122,16 @@ class CameraFragment : Fragment() {
 
             override fun onError(exception: ImageCaptureException) {
                 Log.e("CameraFragment", "Photo capture failed: ${exception.message}", exception)
-                processingImage = false // 이미지 처리 실패 시 초기화
+                endProgress()
             }
         })
+    }
+
+
+    // 이미지 처리 완료(혹은 에러시) 변수 초기화
+    private fun endProgress(){
+        processingImage = false // 이미지 처리 실패 시 초기화
+        progressBar.visibility = View.GONE
     }
 
     private fun ImageProxy.toBitmap(): Bitmap {
@@ -231,7 +245,7 @@ class CameraFragment : Fragment() {
                 if (resultText.isEmpty()) {
                     // 텍스트가 인식되지 않았을 경우 안내 팝업을 띄움
                     showTextPopup("텍스트가 인식되지 않았어요! 다시 촬영해주세요.")
-                    processingImage = false
+                    endProgress()
                 } else {
                     // 서버와 통신
                     checkIngredientsWithServer(resultText)
@@ -240,7 +254,7 @@ class CameraFragment : Fragment() {
             .addOnFailureListener { e ->
                 Log.e("OCR Error", e.message.toString())
                 showTextPopup("OCR Error. " + e.message.toString())
-                processingImage = false
+                endProgress()
             }
     }
 
@@ -291,13 +305,13 @@ class CameraFragment : Fragment() {
                     } else {
                         showTextPopup("서버 오류 발생: ${response.code()}")
                     }
-                    processingImage = false
+                    endProgress()
                 }
 
                 override fun onFailure(call: Call<IngredientsResponse>, t: Throwable) {
                     showTextPopup("네트워크 오류 발생: ${t.message}")
                     Log.e("NetworkError", "Error during API call", t)
-                    processingImage = false
+                    endProgress()
                 }
             })
     }

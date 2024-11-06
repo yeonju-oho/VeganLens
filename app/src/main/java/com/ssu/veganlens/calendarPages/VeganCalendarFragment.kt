@@ -18,6 +18,7 @@ import com.ssu.veganlens.R
 import com.ssu.veganlens.databinding.FragmentVeganCalendarBinding
 import com.ssu.veganlens.network.DiarySearchResponse
 import com.ssu.veganlens.network.GetUserResponse
+import com.ssu.veganlens.network.ImageService
 import com.ssu.veganlens.network.NetworkService
 import com.ssu.veganlens.veganLogPages.VeganDiaryFragment
 import retrofit2.Call
@@ -25,6 +26,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -87,13 +92,19 @@ class VeganCalendarFragment : Fragment() {
 
                     try {
                         val dateOnly = createAt.substring(0, 10)  // 첫 10자만 가져옴 (yyyy-MM-dd 부분만 사용)
-                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
 
-                        // 생성 날짜를 LocalDate로 변환
-                        val creationDate = LocalDate.parse(dateOnly, formatter)
+                        // UTC 날짜를 ZonedDateTime으로 변환 (UTC 시간대 사용)
+                        val utcDateTime = ZonedDateTime.of(LocalDate.parse(dateOnly, formatter), LocalTime.MIDNIGHT, ZoneOffset.UTC)
 
-                        // 오늘 날짜 가져오기
-                        val today = LocalDate.now()
+                        // KST 시간대로 변환
+                        val kstDateTime = utcDateTime.withZoneSameInstant(ZoneId.of("Asia/Seoul"))
+
+                        // KST로 변환된 생성 날짜를 LocalDate로 추출
+                        val creationDate = kstDateTime.toLocalDate()
+
+                        // 오늘 날짜 가져오기 (KST)
+                        val today = LocalDate.now(ZoneId.of("Asia/Seoul"))
 
                         // 생성 날짜와 오늘 날짜 간의 차이 계산
                         val diff = ChronoUnit.DAYS.between(creationDate, today)
@@ -143,9 +154,11 @@ class VeganCalendarFragment : Fragment() {
                             val imageView = postView.findViewById<ImageView>(R.id.main_image)
                             val titleTextView = postView.findViewById<TextView>(R.id.title_text)
 
-                            // 이미지를 설정
+                            // 제목과 대표 이미지를 설정한다.
                             if (diary.images.isNotEmpty()) {
-                                //TODO: 여기서 실제 이미지 설정하도록 해야 함
+                                if (diary.images[0].isNotBlank()) {
+                                    ImageService.loadImageIntoImageView(requireContext(), diary.images[0], imageView)
+                                }
                             }
                             titleTextView.text = diary.title
 

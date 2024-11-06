@@ -1,11 +1,15 @@
 package com.ssu.veganlens.calendarPages
 
+import android.app.Activity
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.ssu.veganlens.R
@@ -20,11 +24,22 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import androidx.activity.result.ActivityResult
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.ssu.veganlens.network.ImageService
+import kotlinx.coroutines.launch
+import java.io.File
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class VeganDiaryAddFragment : Fragment() {
 
     private lateinit var binding: FragmentVeganDiaryAddBinding
     private lateinit var sharedPreferences : SharedPreferences
+    private var imageUris = mutableListOf<Uri>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,28 +62,55 @@ class VeganDiaryAddFragment : Fragment() {
             var isPublic = binding.switchPublic.isChecked
 
             // 내용 있는지 확인
-            if (title.isNullOrBlank() || content.isNullOrBlank())
+            if (title.isBlank() || content.isBlank())
                 return@setOnClickListener
 
-            // 이미지 등록하고 URL 가져오기.
-            val imageUrls = checkUploadImages()
-
-            // DiaryRequest 객체 생성
-            val diaryRequest = AddDiaryRequest(
-                username = nickname,
-                title = title,
-                content = content,
-                images = imageUrls,
-                isPublic = isPublic
-            )
-
-            // 서버로 전송
-            saveDiary(diaryRequest)
+            // saveDiary 호출
+            lifecycleScope.launch {
+                // 서버에 이미지 올리고, 이미지들의 URL 가져오기.
+                val imageUrlStrings = checkUploadImages()
+                val diaryRequest = AddDiaryRequest(
+                    username = nickname,
+                    title = title,
+                    content = content,
+                    images = imageUrlStrings,
+                    isPublic = isPublic
+                )
+                // 서버로 전송
+                saveDiary(diaryRequest)
+            }
         }
+
+        // 이미지 뷰 클릭 리스너 설정
+        binding.ivPhoto1.setOnClickListener { openGallery() }
+        binding.ivPhoto2.setOnClickListener { openGallery() }
+        binding.ivPhoto3.setOnClickListener { openGallery() }
 
         return binding.root
     }
 
+    // 서버에 이미지 올리고, URL 가져오는 코드
+    private suspend fun checkUploadImages(): List<String> {
+        val returnUri = mutableListOf<String>()
+
+        // 비동기 업로드 후 URL 저장
+        for (uri in imageUris) {
+            val url = suspendCoroutine<String> { continuation ->
+                ImageService.uploadImage(requireContext(), uri) { success, imageUrl ->
+                    if (success && imageUrl != null) {
+                        continuation.resume(imageUrl)
+                    } else {
+                        continuation.resumeWithException(Exception("Image upload failed"))
+                    }
+                }
+            }
+            returnUri.add(url)
+        }
+
+        return returnUri
+    }
+
+    // SAVE API CALL
     private fun saveDiary(diaryRequest: AddDiaryRequest) {
         NetworkService.service.addDiray(diaryRequest).enqueue(object : Callback<AddDiaryResponse> {
             override fun onResponse(call: Call<AddDiaryResponse>, response: Response<AddDiaryResponse>) {
@@ -95,30 +137,40 @@ class VeganDiaryAddFragment : Fragment() {
         })
     }
 
-    private fun checkUploadImages() : List<String>{
-        val imageUrls = mutableListOf<String>()
-
-// TODO: 구현 필요
-//        // ivPhoto1이 보여지고 있으면 업로드
-//        val photo1Uri: Uri? = getUriFromImageView(ivPhoto1)
-//        if (photo1Uri != null) {
-//            uploadImage(photo1Uri) { imageUrl ->
-//                imageUrls.add(imageUrl)
-//                //업로드 처리
-//            }
-//        }
-//
-//        // ivPhoto2가 보여지고 있으면 업로드
-//        if (ivPhoto2.visibility == View.VISIBLE) {
-//            val photo2Uri: Uri? = getUriFromImageView(ivPhoto2)
-//            if (photo2Uri != null) {
-//                uploadImage(photo2Uri) { imageUrl ->
-//                    imageUrls.add(imageUrl)
-//                    //업로드 처리
-//                }
-//            }
-//        }
-
-        return imageUrls;
+    //갤러리 열어서 이미지 등록
+    private fun openGallery() {
+        if (imageUris.size < 3) {
+            val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
+            imagePickerLauncher.launch(intent)
+        }
     }
+
+    // 갤러리에서 이미지 선택을 위한 런처 초기화
+    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.data?.let { uri ->
+                addImageToImageView(uri)
+            }
+        }
+    }
+
+    // 이미지 뷰에 이미지를 로드한다.
+    private fun addImageToImageView(uri: Uri) {
+        imageUris.add(uri)
+        when (imageUris.size) {
+            1 -> Glide.with(this).load(uri).into(binding.ivPhoto1)
+            2 -> {
+                binding.ivPhoto2.visibility = View.VISIBLE
+                Glide.with(this).load(uri).into(binding.ivPhoto2)
+            }
+            3 -> {
+                binding.ivPhoto3.visibility = View.VISIBLE
+                Glide.with(this).load(uri).into(binding.ivPhoto3)
+            }
+        }
+    }
+
+
+
+
 }

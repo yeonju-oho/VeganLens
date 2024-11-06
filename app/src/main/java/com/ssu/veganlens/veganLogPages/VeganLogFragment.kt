@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.ssu.veganlens.R
 import com.ssu.veganlens.network.Diary
 import com.ssu.veganlens.network.DiarySearchResponse
+import com.ssu.veganlens.network.ImageService
 import com.ssu.veganlens.network.NetworkService
 import retrofit2.Call
 import retrofit2.Callback
@@ -104,9 +105,11 @@ class VeganLogFragment : Fragment() {
             val imageView = postView.findViewById<ImageView>(R.id.main_image)
             val titleTextView = postView.findViewById<TextView>(R.id.title_text)
 
-            // 이미지를 설정
+            // 제목과 대표 이미지를 설정한다.
             if (diary.images.isNotEmpty()) {
-                //TODO: 여기서 실제 이미지 설정하도록 해야 함
+                if (diary.images[0].isNotBlank()) {
+                    ImageService.loadImageIntoImageView(requireContext(), diary.images[0], imageView)
+                }
             }
             titleTextView.text = diary.title
 

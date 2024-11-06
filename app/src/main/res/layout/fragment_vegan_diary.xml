@@ -6,13 +6,59 @@
     android:background="#F5F5F5">
 
     <!-- 이미지 및 제목 -->
-    <ImageView
-        android:id="@+id/diaryImageView"
+    <LinearLayout
+        android:id="@+id/diaryImageLayout"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/logo"
-        android:contentDescription="Vlog Image" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- 이미지가 표시될 GridLayout -->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:layout_margin="8dp">
+
+            <!-- 첫 번째 이미지뷰: 전체 폭을 차지 -->
+            <ImageView
+                android:id="@+id/diaryImageView1"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_column="0"
+                android:layout_margin="4dp"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="1"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:contentDescription="Vlog Image 1"/>
+
+            <!-- 두 번째 이미지뷰: 왼쪽 열을 차지 -->
+            <ImageView
+                android:id="@+id/diaryImageView2"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_margin="4dp"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:contentDescription="Vlog Image 2"/>
+
+            <!-- 세 번째 이미지뷰: 오른쪽 열을 차지 -->
+            <ImageView
+                android:id="@+id/diaryImageView3"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:layout_margin="4dp"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:contentDescription="Vlog Image 3"/>
+        </GridLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,6 +76,11 @@
             android:layout_height="50dp"
             android:src="@drawable/ic_profile"
             android:contentDescription="User Profile Image"
+            android:background="@drawable/circular_background"
+            android:scaleType="centerCrop"
+            android:clipToOutline="true"
+            android:elevation="4dp"
+            android:layout_marginStart="2dp"
             android:layout_marginEnd="12dp"
             android:layout_gravity="center_vertical" />
 

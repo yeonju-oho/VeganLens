@@ -2,6 +2,7 @@ package com.ssu.veganlens.veganLogPages
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.ssu.veganlens.R
@@ -22,20 +25,19 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import androidx.navigation.fragment.findNavController
 import com.ssu.veganlens.calendarPages.VeganCalendarFragment
+import com.ssu.veganlens.databinding.FragmentVeganDiaryAddBinding
+import com.ssu.veganlens.databinding.FragmentVeganDiaryBinding
+import com.ssu.veganlens.network.GetUserResponse
+import com.ssu.veganlens.network.ImageService
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 
 class VeganDiaryFragment : Fragment() {
 
+    private lateinit var binding: FragmentVeganDiaryBinding
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var diaryTitleTextView: TextView
-    private lateinit var diaryContentTextView: TextView
-    private lateinit var userNameTextView: TextView
-    private lateinit var publicTextView: TextView
-    private lateinit var dateTextView: TextView
-    private lateinit var userProfileImageView: ImageView
-    private lateinit var diaryImageView: ImageView
-    private lateinit var editButton: Button
-    private lateinit var deleteButton: Button
 
     private var beforePage = 0  //이전 Page, 캘린더->1, Log->2
 
@@ -60,62 +62,68 @@ class VeganDiaryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_vegan_diary, container, false)
-
+        binding = FragmentVeganDiaryBinding.inflate(inflater, container, false)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+
         val username = sharedPreferences.getString("nickname", "도토리")
-
-        // 뷰 연결
-        diaryTitleTextView = view.findViewById(R.id.diaryTitle)
-        diaryContentTextView = view.findViewById(R.id.diaryContext)
-        userNameTextView = view.findViewById(R.id.diaryUsername)
-        publicTextView = view.findViewById(R.id.diaryPublic)
-        dateTextView = view.findViewById(R.id.diaryDate)
-        userProfileImageView = view.findViewById(R.id.diaryUserPic)
-        diaryImageView = view.findViewById(R.id.diaryImageView)
-        editButton = view.findViewById(R.id.editButton)
-        deleteButton = view.findViewById(R.id.deleteButton)
-
         var id: String? = null // id 변수의 타입을 명시하고 초기화
 
         // Arguments에서 데이터 가져오기
         arguments?.let {
             beforePage = it.getInt("beforePage")
 
-            id = it.getString("_id");
-            diaryTitleTextView.text = it.getString("title")
-            diaryContentTextView.text = it.getString("content")
-            userNameTextView.text = it.getString("username")
-            publicTextView.text =  it.getString("isPublic")
-            dateTextView.text = it.getString("publishedAt")
-            // 사용자 프로필 이미지 로드 (임시 이미지로 대체 가능)
-            userProfileImageView.setImageResource(R.drawable.ic_profile) // 사용할 실제 리소스로 변경
-            // Diary의 첫 번째 이미지 표시
+            id = it.getString("_id")
+            binding.diaryTitle.text = it.getString("title")
+            binding.diaryContext.text = it.getString("content")
+            binding.diaryUsername.text = it.getString("username")
+            binding.diaryPublic.text =  it.getString("isPublic")
+            binding.diaryDate.text = it.getString("publishedAt")
+
+            // 사용자 프로필 이미지 로드
+            val diaryUsername = binding.diaryUsername.text.toString()
+            getUserPicString(diaryUsername) { userPic ->
+                if (userPic.isNotBlank()) {
+                    ImageService.loadImageIntoImageView(requireContext(), userPic, binding.diaryUserPic)
+                }
+            }
+
+            // Diary의 이미지 로드
             val images = it.getStringArrayList("images")
             if (!images.isNullOrEmpty()) {
-                diaryImageView.setImageResource(R.drawable.vlog_image) // 사용할 실제 이미지 URL로 변경
+                displayImages(images)
+            } else { // 이미지 없으면 이미지 영역 표시하지 않음
+                binding.diaryImageLayout.visibility = View.GONE
+            }
+
+            // 글이 글쓴이의 것이면
+            if (binding.diaryUsername.text.equals(username)) {
+                binding.editButton.visibility = View.GONE // 수정버튼은 일단 숨겨둠
+                binding.deleteButton.visibility = View.VISIBLE
+            } else {
+                binding.editButton.visibility = View.GONE
+                binding.deleteButton.visibility = View.GONE
+            }
+
+            binding.deleteButton.setOnClickListener {
+                id?.let { diaryId ->
+                    deleteDiaryById(diaryId, images) // 삭제 시 id와 images 리스트를 전달
+                }
             }
         }
 
-        // 글이 글쓴이의 것이면
-        if (userNameTextView.text.equals(username)) {
-            editButton.visibility = View.GONE  //수정버튼은 일단 숨겨둠
-            deleteButton.visibility = View.VISIBLE
-        }
-        else {
-            editButton.visibility = View.GONE
-            deleteButton.visibility = View.GONE
-        }
-
-        deleteButton.setOnClickListener{
-            id?.let { it1 -> deleteDiaryById(it1) }
-        }
-
-        return view
+        return binding.root
     }
 
-    // 예시 함수: 일기 삭제 요청을 보내고 응답을 처리하는 코드
-    private fun deleteDiaryById(diaryId: String) {
+    // 일기 삭제 요청을 보내고 응답을 처리하는 코드
+    private fun deleteDiaryById(diaryId: String, images: ArrayList<String>?) {
+        // 서버에 올라가있는 이미지부터 삭제한다.
+        images?.forEachIndexed { index, url ->
+            if (url.isNotEmpty()) {
+                ImageService.deleteImage(url)
+            }
+        }
+
+        // DB에 있는 게시물 정보를 삭제한다.
         NetworkService.service.deleteDiary(diaryId).enqueue(object : Callback<DeleteDiaryResponse> {
             override fun onResponse(
                 call: Call<DeleteDiaryResponse>,
@@ -148,6 +156,57 @@ class VeganDiaryFragment : Fragment() {
                 println("네트워크 오류: ${t.message}")
             }
         })
+    }
+
+
+    // 프로필 사진을 가져오기 위해 유저 정보를 가져오는 함수
+    private fun getUserPicString(username: String, callback: (String) -> Unit) {
+        // API 요청
+        NetworkService.service.getUser(username).enqueue(object : Callback<GetUserResponse> {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onResponse(call: Call<GetUserResponse>, response: Response<GetUserResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    response.body()!!.user?.let { callback(it.profilePicture) }
+                } else {
+                    // 서버 오류 또는 사용자를 찾을 수 없는 경우 빈 문자열 반환
+                    callback("")
+                    Toast.makeText(requireContext(), "서버에서 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<GetUserResponse>, t: Throwable) {
+                // 네트워크 오류 발생 시 빈 문자열 반환
+                callback("")
+                Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    // 이미지 디스플레이 하는 함수
+    fun displayImages(imageUrls: List<String>) {
+        // 이미지 URL이 ""인 경우는 로드하지 않음
+        val validUrls = imageUrls.filter { it.isNotBlank() }
+
+        // 각 이미지뷰 가져오기
+        val imageView1 = binding.diaryImageView1
+        val imageView2 = binding.diaryImageView2
+        val imageView3 = binding.diaryImageView3
+
+        // 모든 이미지뷰 초기화
+        imageView1.visibility = View.GONE
+        imageView2.visibility = View.GONE
+        imageView3.visibility = View.GONE
+
+        // 이미지 뷰 목록 (순서대로 imageView1, imageView2, imageView3)
+        val imageViews = listOf(imageView1, imageView2, imageView3)
+
+        // 이미지 뷰의 visibility 설정 및 URL 로드
+        validUrls.forEachIndexed { index, url ->
+            if (index < imageViews.size) {
+                imageViews[index].visibility = View.VISIBLE
+                ImageService.loadImageIntoImageView(requireContext(), url, imageViews[index])
+            }
+        }
     }
 
 }
