@@ -1,12 +1,15 @@
 package com.ssu.veganlens.network
 
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.HTTP
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.Date
@@ -75,6 +78,16 @@ interface ApiService {
         @Path("id") id: String,
     ): Call<DeleteDiaryResponse>
 
+    @Multipart
+    @POST("/api/upload-image")
+    fun uploadImage(
+        @Part image: MultipartBody.Part
+    ): Call<ImageResponse>
+
+    @DELETE("/api/delete-image")
+    fun deleteImage(
+        @Query("imageUrl") imageUrl: String
+    ): Call<ApiResponse> // 삭제 성공/실패 응답 처리
 }
 
 
@@ -199,6 +212,16 @@ data class DiarySearchResponse(
 )
 
 data class DeleteDiaryResponse(
+    val success: Boolean,
+    val message: String
+)
+
+data class ImageResponse(
+    val success: Boolean,
+    val imageUrl: String
+)
+
+data class ApiResponse(
     val success: Boolean,
     val message: String
 )

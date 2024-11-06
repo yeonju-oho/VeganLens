@@ -60,7 +60,7 @@ class ResultFragment : Fragment() {
         val request = AddUserRequest(
             username = nickname,
             isAdmin = false,  // 이 예시에서는 일반 사용자를 저장
-            profilePicture = "https://default-pic-url.com",  // 기본 프로필 이미지 URL을 설정
+            profilePicture = "",  // 기본 프로필 이미지 URL을 설정
             bio = "소개글",  // 유저의 간단한 소개
             reason = reason,  // 비건 이유 코드 저장
             veganType = when (veganLevel.trim()) {  // 공백을 제거한 후 비교
