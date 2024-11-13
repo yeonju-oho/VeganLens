@@ -25,7 +25,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -91,11 +93,11 @@ class VeganCalendarFragment : Fragment() {
                     }
 
                     try {
-                        val dateOnly = createAt.substring(0, 10)  // 첫 10자만 가져옴 (yyyy-MM-dd 부분만 사용)
-                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
+                        // ISO 8601 형식의 UTC 문자열을 Instant로 변환
+                        val utcInstant = Instant.parse(createAt)
 
-                        // UTC 날짜를 ZonedDateTime으로 변환 (UTC 시간대 사용)
-                        val utcDateTime = ZonedDateTime.of(LocalDate.parse(dateOnly, formatter), LocalTime.MIDNIGHT, ZoneOffset.UTC)
+                        // Instant를 ZonedDateTime으로 변환 (UTC 시간대 사용)
+                        val utcDateTime = utcInstant.atZone(ZoneId.of("UTC"))
 
                         // KST 시간대로 변환
                         val kstDateTime = utcDateTime.withZoneSameInstant(ZoneId.of("Asia/Seoul"))
@@ -109,7 +111,7 @@ class VeganCalendarFragment : Fragment() {
                         // 생성 날짜와 오늘 날짜 간의 차이 계산
                         val diff = ChronoUnit.DAYS.between(creationDate, today)
 
-                        // 계산된 차이를 콜백으로 반환
+                        // 차이값 콜백
                         callback(diff)
                     } catch (e: Exception) {
                         // 예외 발생 시 0 반환
